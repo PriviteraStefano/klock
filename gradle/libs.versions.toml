@@ -29,6 +29,7 @@ postgresql = "42.7.9"
 serialization = "1.10.0"
 koin = "4.2.0-RC1"
 koin-plugin = "0.3.0"
+kotlin-datetime = "0.7.1"
 
 [libraries]
 # common dependencies
@@ -36,6 +37,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
 serialization-kotlinx-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime"}
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
 
 # android dependencies
@@ -73,6 +75,8 @@ ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.re
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposedJdbc" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposedCore" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposedCore" }
+exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposedCore" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koinLoggerSlf4j" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }

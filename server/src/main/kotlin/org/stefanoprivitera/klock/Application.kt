@@ -12,7 +12,7 @@ import org.koin.ktor.plugin.Koin
 import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
-import org.stefanoprivitera.klock.authentication.jwtAuth
+import org.stefanoprivitera.klock.configuration.jwtAuth
 import org.stefanoprivitera.klock.service.authentication
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -23,7 +23,7 @@ fun Application.module() {
         createEagerInstances()
     }
     routing {
-        swaggerUI(path = "openapi") {
+        swaggerUI(path = "swagger") {
             info = OpenApiInfo(title = "My API", version = "1.0.0")
         }
     }

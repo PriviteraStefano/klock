@@ -1,0 +1,19 @@
+services:
+  local-database:
+    image: "postgres:17.2"
+    container_name: "local-database"
+    ports:
+      - "5432:5432"
+    env_file:
+      - postgres.env
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+  test-database:
+    image: "postgres:17.2"
+    container_name: "test-database"
+    ports:
+      - "5433:5432"
+    env_file:
+      - postgres.env
+volumes:
+  db-data: {}
