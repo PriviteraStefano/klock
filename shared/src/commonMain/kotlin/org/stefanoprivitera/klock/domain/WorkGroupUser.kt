@@ -1,28 +1,28 @@
 package org.stefanoprivitera.klock.domain
 
 import kotlinx.serialization.Serializable
-import kotlin.uuid.Uuid
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-data class UserDepartment(
+data class WorkGroupUser(
     val id: Uuid,
-    val departmentId: Uuid,
+    val workGroupId: Uuid,
     val userId: Uuid
 )
 
-sealed interface UserDepartmentRequest {
+sealed interface WorkGroupUserRequest {
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Create(
-        val userId: Uuid,
-        val departmentId: Uuid
-    ) : UserDepartmentRequest
+        val workGroupId: Uuid,
+        val userId: Uuid
+    ) : WorkGroupUserRequest
 
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Filter(
-        val userId: Uuid?,
-        val departmentId: Uuid?
-    ) : UserDepartmentRequest
+        val workGroupId: Uuid?,
+        val userId: Uuid?
+    ) : WorkGroupUserRequest
 }
