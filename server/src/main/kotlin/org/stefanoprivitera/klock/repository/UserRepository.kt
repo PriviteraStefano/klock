@@ -6,7 +6,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-interface IUserRepository {
+interface UserRepository {
     fun create(user: UserRequest.Create): Uuid
     fun update(user: UserRequest.Update): Int
     fun findById(id: Uuid): User?

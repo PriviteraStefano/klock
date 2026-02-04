@@ -5,37 +5,33 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-data class Department(
+data class WorkGroup (
     val id: Uuid,
     val name: String,
     val description: String,
-    val parentDepartmentId: Uuid?,
-    val departmentUsers: List<User>
+    val users: List<User>
 )
 
-sealed interface DepartmentRequest {
+sealed interface WorkGroupRequest {
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Create(
         val name: String,
-        val description: String,
-        val parentDepartmentId: Uuid?
-    ) : DepartmentRequest
+        val description: String
+    ) : WorkGroupRequest
 
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Update(
         val id: Uuid,
         val name: String?,
-        val description: String?,
-        val parentDepartmentId: Uuid?
-    ) : DepartmentRequest
+        val description: String?
+    ) : WorkGroupRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Filter(
         val name: String?,
         val description: String?,
-        val parentDepartmentId: Uuid?
-    ) : DepartmentRequest
+        val users: List<String>? // user IDs
+    ) : WorkGroupRequest
 }

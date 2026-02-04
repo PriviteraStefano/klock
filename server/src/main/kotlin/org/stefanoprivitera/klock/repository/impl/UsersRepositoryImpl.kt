@@ -17,14 +17,14 @@ import org.stefanoprivitera.klock.persistance.Users.createdAt
 import org.stefanoprivitera.klock.persistance.Users.firstname
 import org.stefanoprivitera.klock.persistance.Users.lastname
 import org.stefanoprivitera.klock.persistance.Users.updatedAt
-import org.stefanoprivitera.klock.repository.IUserRepository
+import org.stefanoprivitera.klock.repository.UserRepository
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
-class UsersRepository : IUserRepository {
+class UsersRepositoryImpl : UserRepository {
     override fun create(user: UserRequest.Create): Uuid {
         return transaction {
             Users.insertAndGetId {
@@ -52,8 +52,8 @@ class UsersRepository : IUserRepository {
         return transaction {
             Users.selectAll()
                 .where { Users.id eq id }
+                .map(::toUser)
                 .firstOrNull()
-                ?.toUser()
                 ?: return@transaction null
         }
     }
@@ -62,8 +62,8 @@ class UsersRepository : IUserRepository {
         return transaction {
             Users.selectAll()
                 .where { Users.email eq email }
+                .map(::toUser)
                 .firstOrNull()
-                ?.toUser()
                 ?: return@transaction null
         }
     }
@@ -71,7 +71,7 @@ class UsersRepository : IUserRepository {
     override fun findAll(): List<User> {
         return transaction {
             Users.selectAll()
-                .map { it.toUser() }
+                .map(::toUser)
         }
     }
 
@@ -81,14 +81,14 @@ class UsersRepository : IUserRepository {
         }
     }
 
-    private fun ResultRow.toUser(): User {
+    private fun toUser(r: ResultRow): User {
         return User(
-            id = this[Users.id].value,
-            email = this[Users.email],
-            firstname = this[firstname],
-            lastname = this[lastname],
-            createdAt = this[createdAt],
-            updatedAt = this[updatedAt]
+            id = r[Users.id].value,
+            email = r[Users.email],
+            firstname = r[firstname],
+            lastname = r[lastname],
+            createdAt = r[createdAt],
+            updatedAt = r[updatedAt]
         )
     }
 }

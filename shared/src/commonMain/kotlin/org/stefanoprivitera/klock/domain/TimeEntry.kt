@@ -20,8 +20,43 @@ data class TimeEntry(
     val updatedAt: LocalDateTime
 )
 
+sealed interface TimeEntryRequest {
+    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
+    data class Create(
+        val userId: Uuid,
+        val date: LocalDate,
+        val type: String,
+        val totalHours: Double,
+        val status: String,
+        val metadata: TimeEntryMetadata
+    ) : TimeEntryRequest
+
+    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
+    data class Update(
+        val id: Uuid,
+        val date: LocalDate?,
+        val type: String?,
+        val totalHours: Double?,
+        val status: String?,
+        val metadata: TimeEntryMetadata?
+    ) : TimeEntryRequest
+
+    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
+    data class Filter(
+        val userId: Uuid?,
+        val dateFrom: LocalDate?,
+        val dateTo: LocalDate?,
+        val type: String?,
+        val status: String?
+    ) : TimeEntryRequest
+}
+
+
 @OptIn(ExperimentalUuidApi::class)
-sealed class TimeEntryMetadata {
+sealed interface TimeEntryMetadata {
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     @SerialName("Work")
@@ -29,15 +64,15 @@ sealed class TimeEntryMetadata {
         val projectId: Uuid,
         val description: String,
         val location: String
-    ) : TimeEntryMetadata()
+    ) : TimeEntryMetadata
 
     @Serializable
     @SerialName("Holiday")
-    data object Holiday : TimeEntryMetadata()
+    data object Holiday : TimeEntryMetadata
 
     @Serializable
     @SerialName("Learning")
-    data class Learning(val topic: String, val description: String, val isStudent: Boolean) : TimeEntryMetadata()
+    data class Learning(val topic: String, val description: String, val isStudent: Boolean) : TimeEntryMetadata
 
     @Serializable
     @SerialName("Demo")
@@ -45,9 +80,9 @@ sealed class TimeEntryMetadata {
         val customerId: String,
         val managerId: String,
         val projectId: Uuid
-    ) : TimeEntryMetadata()
+    ) : TimeEntryMetadata
 
     @Serializable
     @SerialName("Permit")
-    data class Permit(val type: String) : TimeEntryMetadata()
+    data class Permit(val type: String) : TimeEntryMetadata
 }
