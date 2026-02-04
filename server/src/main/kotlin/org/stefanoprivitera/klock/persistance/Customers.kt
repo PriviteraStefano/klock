@@ -5,13 +5,14 @@ import org.jetbrains.exposed.v1.datetime.datetime
 import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalUuidApi::class)
-object Projects : UuidTable("projects") {
+object Customers : UuidTable("customers") {
+    val vatNumber = varchar("vat_number", 50).uniqueIndex()
+    val taxCode = varchar("tax_code", 50).uniqueIndex()
+    val companyName = varchar("company_name", 255)
     val name = varchar("name", 255)
-    val customerId = reference("customer_id", Customers)
-    val managerId = reference("manager_id", Users)
-    val departmentId = reference("department_id", Departments)
-    val workGroupId = reference("work_group_id", WorkGroups)
-    val active = bool("active").default(true)
+    val email = varchar("email", 255)
+    val phone = varchar("phone", 50)
+    val address = text("address")
     val createdAt = datetime("created_at")
     val updatedAt = datetime("updated_at")
 }
