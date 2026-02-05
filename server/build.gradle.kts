@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
+    implementation("io.ktor:ktor-server-request-validation:3.4.0")
     // Dependency Injection
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
