@@ -6,6 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.response.WorkGroupUserResponse
 import org.stefanoprivitera.klock.service.WorkGroupUserService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -19,7 +20,7 @@ fun Route.workGroupUsers() {
             val workGroupId = call.request.queryParameters["workGroupId"]?.let { WorkGroupId(Uuid.parse(it)) }
             val userId = call.request.queryParameters["userId"]?.let { UserId(Uuid.parse(it)) }
             val filterRequest = WorkGroupUserRequest.Filter(workGroupId, userId)
-            val workGroupUsers = workGroupUserService.findAll(filterRequest)
+            val workGroupUsers = workGroupUserService.findAll(filterRequest).map { WorkGroupUserResponse.from(it) }
             call.respond(workGroupUsers)
         }
 

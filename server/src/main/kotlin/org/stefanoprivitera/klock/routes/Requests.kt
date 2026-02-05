@@ -6,6 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.response.RequestResponse
 import org.stefanoprivitera.klock.service.RequestService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -21,7 +22,7 @@ fun Route.requests() {
             val requestType = call.request.queryParameters["requestType"]
             val status = call.request.queryParameters["status"]
             val filterRequest = RequestRequest.Filter(projectId, contractId, requestType, status)
-            val requests = requestService.findAll(filterRequest)
+            val requests = requestService.findAll(filterRequest).map { RequestResponse.from(it) }
             call.respond(requests)
         }
 
@@ -39,7 +40,7 @@ fun Route.requests() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val request = requestService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(request)
+                call.respond(RequestResponse.from(request))
             }
 
             put {

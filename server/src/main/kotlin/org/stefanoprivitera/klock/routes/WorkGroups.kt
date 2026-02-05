@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.WorkGroupId
 import org.stefanoprivitera.klock.domain.WorkGroupRequest
+import org.stefanoprivitera.klock.domain.response.WorkGroupResponse
 import org.stefanoprivitera.klock.service.WorkGroupService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -21,7 +22,7 @@ fun Route.workGroups() {
             val description = call.request.queryParameters["description"]
             val users = call.request.queryParameters["users"]?.split(",")
             val filterRequest = WorkGroupRequest.Filter(name, description, users)
-            val workGroups = workGroupService.findAll(filterRequest)
+            val workGroups = workGroupService.findAll(filterRequest).map { WorkGroupResponse.from(it) }
             call.respond(workGroups)
         }
 
@@ -39,7 +40,7 @@ fun Route.workGroups() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val workGroup = workGroupService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(workGroup)
+                call.respond(WorkGroupResponse.from(workGroup))
             }
 
             put {

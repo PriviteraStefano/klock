@@ -6,6 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.response.ProjectResponse
 import org.stefanoprivitera.klock.service.ProjectService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -23,7 +24,7 @@ fun Route.projects() {
             val workGroupId = call.request.queryParameters["workGroupId"]?.let { WorkGroupId(Uuid.parse(it)) }
             val active = call.request.queryParameters["active"]?.toBoolean()
             val filterRequest = ProjectRequest.Filter(name, customerId, managerId, departmentId, workGroupId, active)
-            val projects = projectService.findAll(filterRequest)
+            val projects = projectService.findAll(filterRequest).map { ProjectResponse.from(it) }
             call.respond(projects)
         }
 
@@ -41,7 +42,7 @@ fun Route.projects() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val project = projectService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(project)
+                call.respond(ProjectResponse.from(project))
             }
 
             put {

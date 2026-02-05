@@ -9,6 +9,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.ExpenseId
 import org.stefanoprivitera.klock.domain.ExpenseRequest
 import org.stefanoprivitera.klock.domain.UserId
+import org.stefanoprivitera.klock.domain.response.ExpenseResponse
 import org.stefanoprivitera.klock.service.ExpenseService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -25,7 +26,7 @@ fun Route.expenses() {
             val category = call.request.queryParameters["category"]
             val status = call.request.queryParameters["status"]
             val filterRequest = ExpenseRequest.Filter(userId, dateFrom, dateTo, category, status)
-            val expenses = expenseService.findAll(filterRequest)
+            val expenses = expenseService.findAll(filterRequest).map { ExpenseResponse.from(it) }
             call.respond(expenses)
         }
 
@@ -43,7 +44,7 @@ fun Route.expenses() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val expense = expenseService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(expense)
+                call.respond(ExpenseResponse.from(expense))
             }
 
             put {

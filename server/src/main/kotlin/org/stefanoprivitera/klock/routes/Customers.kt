@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.CustomerId
 import org.stefanoprivitera.klock.domain.CustomerRequest
+import org.stefanoprivitera.klock.domain.response.CustomerResponse
 import org.stefanoprivitera.klock.service.CustomerService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -21,7 +22,7 @@ fun Route.customers() {
             val name = call.request.queryParameters["name"]
             val email = call.request.queryParameters["email"]
             val filterRequest = CustomerRequest.Filter(companyName, name, email)
-            val customers = customerService.findAll(filterRequest)
+            val customers = customerService.findAll(filterRequest).map { CustomerResponse.from(it) }
             call.respond(customers)
         }
 
@@ -39,7 +40,7 @@ fun Route.customers() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val customer = customerService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(customer)
+                call.respond(CustomerResponse.from(customer))
             }
 
             put {

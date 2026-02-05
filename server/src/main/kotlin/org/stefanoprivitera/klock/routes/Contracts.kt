@@ -9,6 +9,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.ContractId
 import org.stefanoprivitera.klock.domain.ContractRequest
 import org.stefanoprivitera.klock.domain.CustomerId
+import org.stefanoprivitera.klock.domain.response.ContractResponse
 import org.stefanoprivitera.klock.service.ContractService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -24,7 +25,7 @@ fun Route.contracts() {
             val billingDateTo = call.request.queryParameters["billingDateTo"]?.let { LocalDate.parse(it) }
             val status = call.request.queryParameters["status"]
             val filterRequest = ContractRequest.Filter(customerId, billingDateFrom, billingDateTo, status)
-            val contracts = contractService.findAll(filterRequest)
+            val contracts = contractService.findAll(filterRequest).map { ContractResponse.from(it) }
             call.respond(contracts)
         }
 
@@ -42,7 +43,7 @@ fun Route.contracts() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val contract = contractService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(contract)
+                call.respond(ContractResponse.from(contract))
             }
 
             put {

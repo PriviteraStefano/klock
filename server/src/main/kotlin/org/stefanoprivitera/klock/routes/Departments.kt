@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.DepartmentId
 import org.stefanoprivitera.klock.domain.DepartmentRequest
+import org.stefanoprivitera.klock.domain.response.DepartmentResponse
 import org.stefanoprivitera.klock.service.DepartmentService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -21,7 +22,7 @@ fun Route.departments() {
             val description = call.request.queryParameters["description"]
             val parentDepartmentId = call.request.queryParameters["parentDepartmentId"]?.let { DepartmentId(Uuid.parse(it)) }
             val filterRequest = DepartmentRequest.Filter(name, description, parentDepartmentId)
-            val departments = departmentService.findAll(filterRequest)
+            val departments = departmentService.findAll(filterRequest).map { DepartmentResponse.from(it) }
             call.respond(departments)
         }
 
@@ -39,7 +40,7 @@ fun Route.departments() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val department = departmentService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(department)
+                call.respond(DepartmentResponse.from(department))
             }
 
             put {

@@ -6,6 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.response.TimeEntryItemResponse
 import org.stefanoprivitera.klock.service.TimeEntryItemService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -20,7 +21,7 @@ fun Route.timeEntryItems() {
             val projectId = call.request.queryParameters["projectId"]?.let { ProjectId(Uuid.parse(it)) }
             val approved = call.request.queryParameters["approved"]?.toBoolean()
             val filterRequest = TimeEntryItemRequest.Filter(timeEntryId, projectId, approved)
-            val timeEntryItems = timeEntryItemService.findAll(filterRequest)
+            val timeEntryItems = timeEntryItemService.findAll(filterRequest).map { TimeEntryItemResponse.from(it) }
             call.respond(timeEntryItems)
         }
 
@@ -38,7 +39,7 @@ fun Route.timeEntryItems() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val timeEntryItem = timeEntryItemService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(timeEntryItem)
+                call.respond(TimeEntryItemResponse.from(timeEntryItem))
             }
 
             put {

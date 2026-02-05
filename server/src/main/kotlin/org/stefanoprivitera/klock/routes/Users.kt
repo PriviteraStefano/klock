@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.UserRequest
+import org.stefanoprivitera.klock.domain.response.UserResponse
 import org.stefanoprivitera.klock.service.UserService
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -20,7 +21,7 @@ fun Route.users() {
             val firstname = call.request.queryParameters["firstname"]
             val lastname = call.request.queryParameters["lastname"]
             val filterRequest = UserRequest.Filter(email, firstname, lastname)
-            val users = userService.findAll(filterRequest)
+            val users = userService.findAll(filterRequest).map { UserResponse.from(it) }
             call.respond(users)
         }
 
@@ -37,7 +38,7 @@ fun Route.users() {
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
                 val user = userService.findById(id)
                     ?: return@get call.respond(HttpStatusCode.NotFound)
-                call.respond(user)
+                call.respond(UserResponse.from(user))
             }
             put {
                 val id = call.parameters["id"]?.let { UserId(it) }
