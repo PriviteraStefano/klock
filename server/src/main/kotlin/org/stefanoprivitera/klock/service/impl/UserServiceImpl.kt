@@ -1,6 +1,6 @@
 package org.stefanoprivitera.klock.service.impl
 
-import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.User
 import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.UserRequest
@@ -8,7 +8,7 @@ import org.stefanoprivitera.klock.repository.UserRepository
 import org.stefanoprivitera.klock.service.UserService
 import kotlin.uuid.ExperimentalUuidApi
 
-@Factory
+@Single
 @OptIn(ExperimentalUuidApi::class)
 class UserServiceImpl(
     val userRepository: UserRepository

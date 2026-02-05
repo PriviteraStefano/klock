@@ -8,19 +8,26 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.core.annotation.KoinApplication
+import org.koin.ksp.generated.module
 import org.koin.ktor.plugin.Koin
 import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
 import org.stefanoprivitera.klock.configuration.jwtAuth
 import org.stefanoprivitera.klock.routes.authentication
+import org.stefanoprivitera.klock.routes.users
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
+
+@KoinApplication
+object KlockApp
 
 fun Application.module() {
     install(Koin) {
         slf4jLogger()
         createEagerInstances()
+        modules(KlockServerModule().module)
     }
     routing {
         swaggerUI(path = "swagger") {
@@ -29,17 +36,13 @@ fun Application.module() {
     }
     jwtAuth ()
     routing {
+        get("/") {
+            call.respondText("Ktor: ${Greeting().greet()}")
+        }
         authentication()
         authenticate {
-            get("/") {
-                call.respondText("Ktor: ${Greeting().greet()}")
-            }
-            get("/hello") {
-                val principal = call.principal<JWTPrincipal>()
-                val username = principal!!.payload.getClaim("username").asString()
-                val expiresAt = principal.expiresAt?.time?.minus(System.currentTimeMillis())
-                call.respondText("Hello, $username! Token is expired at $expiresAt ms.")
-            }
+            users()
+
         }
     }
 

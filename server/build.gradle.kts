@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.serialization)
     alias(libs.plugins.koin.compiler)
+    alias(libs.plugins.ksp)
     application
 }
 
@@ -32,6 +33,8 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
+
     // Database
     implementation(libs.postgresql)
     implementation(libs.h2)

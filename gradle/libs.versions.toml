@@ -27,8 +27,10 @@ logback = "1.5.27"
 material3 = "1.10.0-alpha05"
 postgresql = "42.7.9"
 serialization = "1.10.0"
-koin = "4.2.0-RC1"
+koin = "4.2.0-RC2"
 koin-plugin = "0.3.0"
+koin-annotations = "2.3.1"
+ksp = "2.3.2"
 kotlin-datetime = "0.7.1"
 
 [libraries]
@@ -38,7 +40,9 @@ kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.
 junit = { module = "junit:junit", version.ref = "junit" }
 serialization-kotlinx-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime"}
-koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+
 
 # android dependencies
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
@@ -78,9 +82,11 @@ exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "e
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposedCore" }
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposedCore" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koinLoggerSlf4j" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }
 koog-ktor = { module = "ai.koog:koog-ktor", version.ref = "koogKtor" }
+
 
 
 [plugins]
@@ -94,3 +100,4 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

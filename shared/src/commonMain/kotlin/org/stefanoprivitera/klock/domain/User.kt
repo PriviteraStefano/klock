@@ -8,7 +8,10 @@ import kotlin.uuid.Uuid
 
 @JvmInline
 @Serializable
-value class UserId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+@OptIn(ExperimentalUuidApi::class)
+value class UserId(val value: Uuid) {
+    constructor(value: String) : this(Uuid.parse(value))
+}
 
 @Serializable
 @OptIn(ExperimentalUuidApi::class)
@@ -44,5 +47,24 @@ sealed interface UserRequest {
         val email: String?,
         val firstname: String?,
         val lastname: String?,
-    ) : UserRequest
+    ) : UserRequest {
+
+        fun toMap(): Map<String, String?> {
+            return mapOf(
+                "email" to email,
+                "firstname" to firstname,
+                "lastname" to lastname
+            )
+        }
+
+        companion object {
+            fun fromMap(map: Map<String, String?>): Filter {
+                return Filter(
+                    email = map["email"],
+                    firstname = map["firstname"],
+                    lastname = map["lastname"]
+                )
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@ import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.response.respond
-import org.koin.core.annotation.Singleton
+import org.koin.core.annotation.Single
 
 fun Application.jwtAuth() {
     val config by lazy { JWTConfig(environment.config) }
@@ -34,7 +34,7 @@ fun Application.jwtAuth() {
     }
 }
 
-@Singleton
+@Single
 class JWTConfig(
     val secret: String,
     val issuer: String,

@@ -76,5 +76,4 @@ class ContractRepositoryImpl : ContractRepository {
             Contracts.deleteWhere { Contracts.id eq id.value }
         }
     }
-
 }
