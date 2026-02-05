@@ -37,10 +37,10 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.serialization.kotlinx.json)
             implementation(libs.kotlinx.datetime)
-            implementation("com.crossoid:kotlin-native-bigdecimal:1.0.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
 }
+//            implementation("com.crossoid:kotlin-native-bigdecimal:1.0.1")
