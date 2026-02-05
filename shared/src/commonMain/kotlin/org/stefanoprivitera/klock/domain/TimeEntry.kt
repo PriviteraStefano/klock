@@ -4,13 +4,18 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@JvmInline
+@Serializable
+value class TimeEntryId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+
 @OptIn(ExperimentalUuidApi::class)
 data class TimeEntry(
-    val id: Uuid,
-    val userId: Uuid,
+    val id: TimeEntryId,
+    val userId: UserId,
     val date: LocalDate,
     val type: String, // "work", "permit", "holiday", "learning", "demo"
     val totalHours: Double,
@@ -21,10 +26,9 @@ data class TimeEntry(
 )
 
 sealed interface TimeEntryRequest {
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Create(
-        val userId: Uuid,
+        val userId: UserId,
         val date: LocalDate,
         val type: String,
         val totalHours: Double,
@@ -32,10 +36,9 @@ sealed interface TimeEntryRequest {
         val metadata: TimeEntryMetadata
     ) : TimeEntryRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Update(
-        val id: Uuid,
+        val id: TimeEntryId,
         val date: LocalDate?,
         val type: String?,
         val totalHours: Double?,
@@ -43,10 +46,9 @@ sealed interface TimeEntryRequest {
         val metadata: TimeEntryMetadata?
     ) : TimeEntryRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Filter(
-        val userId: Uuid?,
+        val userId: UserId?,
         val dateFrom: LocalDate?,
         val dateTo: LocalDate?,
         val type: String?,
@@ -57,11 +59,10 @@ sealed interface TimeEntryRequest {
 
 @OptIn(ExperimentalUuidApi::class)
 sealed interface TimeEntryMetadata {
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     @SerialName("Work")
     data class Work(
-        val projectId: Uuid,
+        val projectId: ProjectId,
         val description: String,
         val location: String
     ) : TimeEntryMetadata
@@ -79,7 +80,7 @@ sealed interface TimeEntryMetadata {
     data class Demo(
         val customerId: String,
         val managerId: String,
-        val projectId: Uuid
+        val projectId: ProjectId
     ) : TimeEntryMetadata
 
     @Serializable

@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.less
@@ -13,20 +12,22 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.TimeEntry
+import org.stefanoprivitera.klock.domain.TimeEntryId
 import org.stefanoprivitera.klock.domain.TimeEntryRequest
 import org.stefanoprivitera.klock.persistance.TimeEntries
 import org.stefanoprivitera.klock.repository.TimeEntryRepository
+import org.stefanoprivitera.klock.repository.mapper.toTimeEntry
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class TimeEntryRepositoryImpl : TimeEntryRepository {
-    override fun create(entry: TimeEntryRequest.Create): String {
+    override fun create(entry: TimeEntryRequest.Create): TimeEntryId {
         return transaction {
             TimeEntries.insertAndGetId {
-                it[userId] = entry.userId
+                it[userId] = entry.userId.value
                 it[date] = entry.date
                 it[type] = entry.type
                 it[totalHours] = entry.totalHours.toBigDecimal()
@@ -34,13 +35,13 @@ class TimeEntryRepositoryImpl : TimeEntryRepository {
                 it[metadata] = entry.metadata
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value.toString()
+            }.let { TimeEntryId(it.value) }
         }
     }
 
     override fun update(entry: TimeEntryRequest.Update): Int {
         return transaction {
-            TimeEntries.update({ TimeEntries.id eq entry.id }) {
+            TimeEntries.update({ TimeEntries.id eq entry.id.value }) {
                 entry.date?.let { d -> it[date] = d }
                 entry.type?.let { t -> it[type] = t }
                 entry.totalHours?.let { h -> it[totalHours] = h.toBigDecimal() }
@@ -51,11 +52,10 @@ class TimeEntryRepositoryImpl : TimeEntryRepository {
         }
     }
 
-    override fun findById(id: String): TimeEntry? {
+    override fun findById(id: TimeEntryId): TimeEntry? {
         return transaction {
-            val uuid = Uuid.parse(id)
             TimeEntries.selectAll()
-                .where { TimeEntries.id eq uuid }
+                .where { TimeEntries.id eq id.value }
                 .map(::toTimeEntry)
                 .firstOrNull()
         }
@@ -63,46 +63,19 @@ class TimeEntryRepositoryImpl : TimeEntryRepository {
 
     override fun findAll(filter: TimeEntryRequest.Filter): List<TimeEntry> {
         return transaction {
-            var query = TimeEntries.selectAll()
-
-            filter.userId?.let {
-                query = query.where { TimeEntries.userId eq it }
-            }
-            filter.dateFrom?.let {
-                query = query.where { TimeEntries.date greater it }
-            }
-            filter.dateTo?.let {
-                query = query.where { TimeEntries.date less it }
-            }
-            filter.type?.let {
-                query = query.where { TimeEntries.type eq it }
-            }
-            filter.status?.let {
-                query = query.where { TimeEntries.status eq it }
-            }
-
-            query.map(::toTimeEntry)
+            TimeEntries.selectAll()
+                .andWhereIfNotNull(filter.userId) { TimeEntries.userId eq it.value }
+                .andWhereIfNotNull(filter.dateFrom) { TimeEntries.date greater it }
+                .andWhereIfNotNull(filter.dateTo) { TimeEntries.date less it }
+                .andWhereIfNotNull(filter.type) { TimeEntries.type eq it }
+                .andWhereIfNotNull(filter.status) { TimeEntries.status eq it }
+                .map(::toTimeEntry)
         }
     }
 
-    override fun deleteById(id: String): Int {
+    override fun deleteById(id: TimeEntryId): Int {
         return transaction {
-            val uuid = Uuid.parse(id)
-            TimeEntries.deleteWhere { TimeEntries.id eq uuid }
+            TimeEntries.deleteWhere { TimeEntries.id eq id.value }
         }
-    }
-
-    private fun toTimeEntry(r: ResultRow): TimeEntry {
-        return TimeEntry(
-            id = r[TimeEntries.id].value,
-            userId = r[TimeEntries.userId].value,
-            date = r[TimeEntries.date],
-            type = r[TimeEntries.type],
-            totalHours = r[TimeEntries.totalHours].toDouble(),
-            status = r[TimeEntries.status],
-            metadata = r[TimeEntries.metadata],
-            createdAt = r[TimeEntries.createdAt],
-            updatedAt = r[TimeEntries.updatedAt]
-        )
     }
 }

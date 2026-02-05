@@ -13,7 +13,7 @@ import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
 import org.stefanoprivitera.klock.configuration.jwtAuth
-import org.stefanoprivitera.klock.service.authentication
+import org.stefanoprivitera.klock.routes.authentication
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 

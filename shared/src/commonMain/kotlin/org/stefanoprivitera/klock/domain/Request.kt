@@ -1,13 +1,19 @@
 package org.stefanoprivitera.klock.domain
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@JvmInline
+@Serializable
+value class RequestId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+
 @OptIn(ExperimentalUuidApi::class)
 data class Request(
-    val id: Uuid,
-    val projectId: Uuid,
-    val contractId: Uuid,
+    val id: RequestId,
+    val projectId: ProjectId,
+    val contractId: ContractId,
     val requestType: String, // e.g., "Change", "Extension", etc.
     val details: String,
     val status: String,
@@ -16,29 +22,29 @@ data class Request(
 )
 
 sealed interface RequestRequest {
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Create(
-        val projectId: Uuid,
-        val contractId: Uuid,
+        val projectId: ProjectId,
+        val contractId: ContractId,
         val requestType: String,
         val details: String,
         val status: String
     ) : RequestRequest
 
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Update(
-        val id: Uuid,
-        val projectId: Uuid?,
-        val contractId: Uuid?,
+        val id: RequestId,
+        val projectId: ProjectId?,
+        val contractId: ContractId?,
         val requestType: String?,
         val details: String?,
         val status: String?
     ) : RequestRequest
 
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Filter(
-        val projectId: Uuid?,
-        val contractId: Uuid?,
+        val projectId: ProjectId?,
+        val contractId: ContractId?,
         val requestType: String?,
         val status: String?
     ) : RequestRequest

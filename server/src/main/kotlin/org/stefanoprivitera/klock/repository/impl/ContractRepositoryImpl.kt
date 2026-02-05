@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.less
@@ -13,34 +12,36 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Contract
+import org.stefanoprivitera.klock.domain.ContractId
 import org.stefanoprivitera.klock.domain.ContractRequest
 import org.stefanoprivitera.klock.persistance.Contracts
 import org.stefanoprivitera.klock.repository.ContractRepository
+import org.stefanoprivitera.klock.repository.mapper.toContract
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class ContractRepositoryImpl : ContractRepository {
-    override fun create(contract: ContractRequest.Create): Uuid {
+    override fun create(contract: ContractRequest.Create): ContractId {
         return transaction {
-            Contracts.insertAndGetId {
-                it[customerId] = contract.customerId
+            ContractId(Contracts.insertAndGetId {
+                it[customerId] = contract.customerId.value
                 it[billingDate] = contract.billingDate
                 it[amount] = contract.amount
                 it[currency] = contract.currency
                 it[status] = contract.status
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value
+            }.value)
         }
     }
 
     override fun update(contract: ContractRequest.Update): Int {
         return transaction {
-            Contracts.update({ Contracts.id eq contract.id }) {
-                contract.customerId?.let { c -> it[customerId] = c }
+            Contracts.update({ Contracts.id eq contract.id.value }) {
+                contract.customerId?.let { c -> it[customerId] = c.value }
                 contract.billingDate?.let { b -> it[billingDate] = b }
                 contract.amount?.let { a -> it[amount] = a }
                 contract.currency?.let { c -> it[currency] = c }
@@ -50,10 +51,10 @@ class ContractRepositoryImpl : ContractRepository {
         }
     }
 
-    override fun findById(id: Uuid): Contract? {
+    override fun findById(id: ContractId): Contract? {
         return transaction {
             Contracts.selectAll()
-                .where { Contracts.id eq id }
+                .where { Contracts.id eq id.value }
                 .map(::toContract)
                 .firstOrNull()
         }
@@ -61,41 +62,19 @@ class ContractRepositoryImpl : ContractRepository {
 
     override fun findAll(filter: ContractRequest.Filter): List<Contract> {
         return transaction {
-            var query = Contracts.selectAll()
-
-            filter.customerId?.let {
-                query = query.where { Contracts.customerId eq it }
-            }
-            filter.billingDateFrom?.let {
-                query = query.where { Contracts.billingDate greater it }
-            }
-            filter.billingDateTo?.let {
-                query = query.where { Contracts.billingDate less it }
-            }
-            filter.status?.let {
-                query = query.where { Contracts.status eq it }
-            }
-
-            query.map(::toContract)
+            Contracts.selectAll()
+                .andWhereIfNotNull(filter.customerId) { Contracts.customerId eq it.value }
+                .andWhereIfNotNull(filter.billingDateFrom) { Contracts.billingDate greater it }
+                .andWhereIfNotNull(filter.billingDateTo) { Contracts.billingDate less it }
+                .andWhereIfNotNull(filter.status) { Contracts.status eq it }
+                .map(::toContract)
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: ContractId): Int {
         return transaction {
-            Contracts.deleteWhere { Contracts.id eq id }
+            Contracts.deleteWhere { Contracts.id eq id.value }
         }
     }
 
-    private fun toContract(r: ResultRow): Contract {
-        return Contract(
-            id = r[Contracts.id].value,
-            customerId = r[Contracts.customerId].value,
-            billingDate = r[Contracts.billingDate],
-            amount = r[Contracts.amount],
-            currency = r[Contracts.currency],
-            status = r[Contracts.status],
-            createdAt = r[Contracts.createdAt].toString(),
-            updatedAt = r[Contracts.updatedAt].toString()
-        )
-    }
 }

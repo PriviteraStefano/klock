@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
@@ -12,19 +11,21 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Customer
+import org.stefanoprivitera.klock.domain.CustomerId
 import org.stefanoprivitera.klock.domain.CustomerRequest
 import org.stefanoprivitera.klock.persistance.Customers
 import org.stefanoprivitera.klock.repository.CustomerRepository
+import org.stefanoprivitera.klock.repository.mapper.toCustomer
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class CustomerRepositoryImpl : CustomerRepository {
-    override fun create(customer: CustomerRequest.Create): Uuid {
+    override fun create(customer: CustomerRequest.Create): CustomerId {
         return transaction {
-            Customers.insertAndGetId {
+            CustomerId(Customers.insertAndGetId {
                 it[vatNumber] = customer.vatNumber
                 it[taxCode] = customer.taxCode
                 it[companyName] = customer.companyName
@@ -34,13 +35,13 @@ class CustomerRepositoryImpl : CustomerRepository {
                 it[address] = customer.address
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value
+            }.value)
         }
     }
 
     override fun update(customer: CustomerRequest.Update): Int {
         return transaction {
-            Customers.update({ Customers.id eq customer.id }) {
+            Customers.update({ Customers.id eq customer.id.value }) {
                 customer.vatNumber?.let { v -> it[vatNumber] = v }
                 customer.taxCode?.let { t -> it[taxCode] = t }
                 customer.companyName?.let { c -> it[companyName] = c }
@@ -53,10 +54,10 @@ class CustomerRepositoryImpl : CustomerRepository {
         }
     }
 
-    override fun findById(id: Uuid): Customer? {
+    override fun findById(id: CustomerId): Customer? {
         return transaction {
             Customers.selectAll()
-                .where { Customers.id eq id }
+                .where { Customers.id eq id.value }
                 .map(::toCustomer)
                 .firstOrNull()
         }
@@ -64,40 +65,18 @@ class CustomerRepositoryImpl : CustomerRepository {
 
     override fun findAll(filter: CustomerRequest.Filter): List<Customer> {
         return transaction {
-            var query = Customers.selectAll()
-
-            filter.companyName?.let {
-                query = query.where { Customers.companyName like "%$it%" }
-            }
-            filter.name?.let {
-                query = query.where { Customers.name like "%$it%" }
-            }
-            filter.email?.let {
-                query = query.where { Customers.email eq it }
-            }
-
-            query.map(::toCustomer)
+            Customers.selectAll()
+                .andWhereIfNotNull(filter.name) { Customers.name like "%${filter.name} %" }
+                .andWhereIfNotNull(filter.email) { Customers.email like "%${filter.email}%" }
+                .andWhereIfNotNull(filter.companyName) { Customers.companyName like "%${filter.companyName}%" }
+                .map { toCustomer(it) }
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: CustomerId): Int {
         return transaction {
-            Customers.deleteWhere { Customers.id eq id }
+            Customers.deleteWhere { Customers.id eq id.value }
         }
     }
 
-    private fun toCustomer(r: ResultRow): Customer {
-        return Customer(
-            id = r[Customers.id].value,
-            vatNumber = r[Customers.vatNumber],
-            taxCode = r[Customers.taxCode],
-            companyName = r[Customers.companyName],
-            name = r[Customers.name],
-            email = r[Customers.email],
-            phone = r[Customers.phone],
-            address = r[Customers.address],
-            createdAt = r[Customers.createdAt].toString(),
-            updatedAt = r[Customers.updatedAt].toString()
-        )
-    }
 }

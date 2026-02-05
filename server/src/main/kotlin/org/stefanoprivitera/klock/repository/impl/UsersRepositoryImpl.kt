@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
@@ -11,35 +10,32 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.User
+import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.UserRequest
 import org.stefanoprivitera.klock.persistance.Users
-import org.stefanoprivitera.klock.persistance.Users.createdAt
-import org.stefanoprivitera.klock.persistance.Users.firstname
-import org.stefanoprivitera.klock.persistance.Users.lastname
-import org.stefanoprivitera.klock.persistance.Users.updatedAt
 import org.stefanoprivitera.klock.repository.UserRepository
+import org.stefanoprivitera.klock.repository.mapper.toUser
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class UsersRepositoryImpl : UserRepository {
-    override fun create(user: UserRequest.Create): Uuid {
+    override fun create(user: UserRequest.Create): UserId {
         return transaction {
-            Users.insertAndGetId {
+            UserId(Users.insertAndGetId {
                 it[email] = user.email
                 it[firstname] = user.firstname
                 it[lastname] = user.lastname
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value
+            }.value)
         }
     }
 
     override fun update(user: UserRequest.Update): Int {
         return transaction {
-            Users.update({ Users.id eq user.id }) {
+            Users.update({ Users.id eq user.id.value }) {
                 user.firstname?.let { s -> it[firstname] = s }
                 user.lastname?.let { s -> it[lastname] = s }
                 user.password?.let { s -> it[password] = s }
@@ -48,10 +44,10 @@ class UsersRepositoryImpl : UserRepository {
         }
     }
 
-    override fun findById(id: Uuid): User? {
+    override fun findById(id: UserId): User? {
         return transaction {
             Users.selectAll()
-                .where { Users.id eq id }
+                .where { Users.id eq id.value }
                 .map(::toUser)
                 .firstOrNull()
                 ?: return@transaction null
@@ -75,20 +71,10 @@ class UsersRepositoryImpl : UserRepository {
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: UserId): Int {
         return transaction {
-            Users.deleteWhere { Users.id eq id }
+            Users.deleteWhere { Users.id eq id.value }
         }
     }
 
-    private fun toUser(r: ResultRow): User {
-        return User(
-            id = r[Users.id].value,
-            email = r[Users.email],
-            firstname = r[firstname],
-            lastname = r[lastname],
-            createdAt = r[createdAt],
-            updatedAt = r[updatedAt]
-        )
-    }
 }

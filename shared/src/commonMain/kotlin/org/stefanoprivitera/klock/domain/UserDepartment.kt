@@ -1,28 +1,31 @@
 package org.stefanoprivitera.klock.domain
 
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.Uuid
 import kotlin.uuid.ExperimentalUuidApi
 
+@JvmInline
+@Serializable
+value class UserDepartmentId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+
 @OptIn(ExperimentalUuidApi::class)
 data class UserDepartment(
-    val id: Uuid,
-    val departmentId: Uuid,
-    val userId: Uuid
+    val id: UserDepartmentId,
+    val departmentId: DepartmentId,
+    val userId: UserId
 )
 
 sealed interface UserDepartmentRequest {
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Create(
-        val userId: Uuid,
-        val departmentId: Uuid
+        val userId: UserId,
+        val departmentId: DepartmentId
     ) : UserDepartmentRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Filter(
-        val userId: Uuid?,
-        val departmentId: Uuid?
+        val userId: UserId?,
+        val departmentId: DepartmentId?
     ) : UserDepartmentRequest
 }

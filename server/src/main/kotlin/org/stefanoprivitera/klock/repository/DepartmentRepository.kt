@@ -1,12 +1,13 @@
 package org.stefanoprivitera.klock.repository
 
 import org.stefanoprivitera.klock.domain.Department
+import org.stefanoprivitera.klock.domain.DepartmentId
 import org.stefanoprivitera.klock.domain.DepartmentRequest
 
 interface DepartmentRepository {
-    fun create(department: DepartmentRequest.Create): String
-    fun findById(id: String): Department?
+    fun create(department: DepartmentRequest.Create): DepartmentId
+    fun findById(id: DepartmentId): Department?
     fun findAll(filter: DepartmentRequest.Filter): List<Department>
     fun update(department: DepartmentRequest.Update): Int
-    fun deleteById(id: String): Int
+    fun deleteById(id: DepartmentId): Int
 }

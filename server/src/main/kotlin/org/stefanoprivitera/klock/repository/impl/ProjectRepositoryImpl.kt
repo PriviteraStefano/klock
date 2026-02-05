@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
@@ -11,50 +10,50 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
-import org.stefanoprivitera.klock.domain.Project
-import org.stefanoprivitera.klock.domain.ProjectRequest
+import org.stefanoprivitera.klock.domain.*
 import org.stefanoprivitera.klock.persistance.Projects
 import org.stefanoprivitera.klock.repository.ProjectRepository
+import org.stefanoprivitera.klock.repository.mapper.toProject
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class ProjectRepositoryImpl : ProjectRepository {
-    override fun create(project: ProjectRequest.Create): String {
+    override fun create(project: ProjectRequest.Create): ProjectId {
         return transaction {
-            Projects.insertAndGetId {
+            ProjectId(Projects.insertAndGetId {
                 it[name] = project.name
-                it[customerId] = project.customerId
-                it[managerId] = project.managerId
-                it[departmentId] = project.departmentId
-                it[workGroupId] = project.workGroupId
+                it[customerId] = project.customerId.value
+                it[managerId] = project.managerId.value
+                it[departmentId] = project.departmentId.value
+                it[workGroupId] = project.workGroupId.value
                 it[active] = project.active
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value.toString()
+            }.value)
         }
     }
 
     override fun update(project: ProjectRequest.Update): Int {
         return transaction {
-            Projects.update({ Projects.id eq project.id }) {
+            Projects.update({ Projects.id eq project.id.value }) {
                 project.name?.let { n -> it[name] = n }
-                project.customerId?.let { c -> it[customerId] = c }
-                project.managerId?.let { m -> it[managerId] = m }
-                project.departmentId?.let { d -> it[departmentId] = d }
-                project.workGroupId?.let { w -> it[workGroupId] = w }
+                project.customerId?.let { c -> it[customerId] = c.value }
+                project.managerId?.let { m -> it[managerId] = m.value }
+                project.departmentId?.let { d -> it[departmentId] = d.value }
+                project.workGroupId?.let { w -> it[workGroupId] = w.value }
                 project.active?.let { a -> it[active] = a }
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             }
         }
     }
 
-    override fun findById(id: Uuid): Project? {
+    override fun findById(id: ProjectId): Project? {
         return transaction {
             Projects.selectAll()
-                .where { Projects.id eq id }
+                .where { Projects.id eq id.value }
                 .map(::toProject)
                 .firstOrNull()
         }
@@ -62,48 +61,20 @@ class ProjectRepositoryImpl : ProjectRepository {
 
     override fun findAll(filter: ProjectRequest.Filter): List<Project> {
         return transaction {
-            var query = Projects.selectAll()
-
-            filter.name?.let {
-                query = query.where { Projects.name like "%$it%" }
-            }
-            filter.customerId?.let {
-                query = query.where { Projects.customerId eq it }
-            }
-            filter.managerId?.let {
-                query = query.where { Projects.managerId eq it }
-            }
-            filter.departmentId?.let {
-                query = query.where { Projects.departmentId eq it }
-            }
-            filter.workGroupId?.let {
-                query = query.where { Projects.workGroupId eq it }
-            }
-            filter.active?.let {
-                query = query.where { Projects.active eq it }
-            }
-
-            query.map(::toProject)
+            Projects.selectAll()
+                .andWhereIfNotNull(filter.name) { Projects.name like "%${it}%" }
+                .andWhereIfNotNull(filter.customerId) { Projects.customerId eq it.value }
+                .andWhereIfNotNull(filter.managerId) { Projects.managerId eq it.value }
+                .andWhereIfNotNull(filter.departmentId) { Projects.departmentId eq it.value }
+                .andWhereIfNotNull(filter.workGroupId) { Projects.workGroupId eq it.value }
+                .andWhereIfNotNull(filter.active) { Projects.active eq it }
+                .map(::toProject)
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: ProjectId): Int {
         return transaction {
-            Projects.deleteWhere { Projects.id eq id }
+            Projects.deleteWhere { Projects.id eq id.value }
         }
-    }
-
-    private fun toProject(r: ResultRow): Project {
-        return Project(
-            id = r[Projects.id].value,
-            name = r[Projects.name],
-            customerId = r[Projects.customerId].value,
-            managerId = r[Projects.managerId].value,
-            departmentId = r[Projects.departmentId].value,
-            workGroupId = r[Projects.workGroupId].value,
-            active = r[Projects.active],
-            createdAt = r[Projects.createdAt],
-            updatedAt = r[Projects.updatedAt]
-        )
     }
 }

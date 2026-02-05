@@ -1,16 +1,15 @@
 package org.stefanoprivitera.klock.repository
 
+import org.stefanoprivitera.klock.domain.TimeEntryId
 import org.stefanoprivitera.klock.domain.TimeEntryItem
+import org.stefanoprivitera.klock.domain.TimeEntryItemId
 import org.stefanoprivitera.klock.domain.TimeEntryItemRequest
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 interface TimeEntryItemRepository {
-    fun create(item: TimeEntryItemRequest.Create): Uuid
+    fun create(item: TimeEntryItemRequest.Create): TimeEntryItemId
     fun update(item: TimeEntryItemRequest.Update): Int
-    fun findById(id: Uuid): TimeEntryItem?
+    fun findById(id: TimeEntryItemId): TimeEntryItem?
     fun findAll(filter: TimeEntryItemRequest.Filter): List<TimeEntryItem>
-    fun deleteById(id: Uuid): Int
-    fun deleteByTimeEntryId(timeEntryId: Uuid): Int
+    fun deleteById(id: TimeEntryItemId): Int
+    fun deleteByTimeEntryId(timeEntryId: TimeEntryId): Int
 }

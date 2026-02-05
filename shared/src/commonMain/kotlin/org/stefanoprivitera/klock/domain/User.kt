@@ -2,13 +2,18 @@ package org.stefanoprivitera.klock.domain
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+
+@JvmInline
+@Serializable
+value class UserId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
 
 @Serializable
 @OptIn(ExperimentalUuidApi::class)
 data class User(
-    val id: Uuid,
+    val id: UserId,
     val email: String,
     val firstname: String,
     val lastname: String,
@@ -16,21 +21,30 @@ data class User(
     val updatedAt: LocalDateTime
 )
 
-sealed class UserRequest {
+sealed interface UserRequest {
     @Serializable
     data class Create(
         val email: String,
         val firstname: String,
         val lastname: String,
         val password: String
-    ) : UserRequest()
+    ) : UserRequest
 
     @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Update(
-        val id: Uuid,
+        val id: UserId,
         val firstname: String?,
         val lastname: String?,
         val password: String?
-    ) : UserRequest()
+    ) : UserRequest
+
+    @Serializable
+    data class Filter(
+        val email: String?,
+        val firstname: String?,
+        val lastname: String?,
+        val groupName: String?,
+        val departmentName: String?,
+    ) : UserRequest
 }

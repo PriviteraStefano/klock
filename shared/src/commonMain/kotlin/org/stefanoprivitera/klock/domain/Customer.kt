@@ -1,11 +1,17 @@
 package org.stefanoprivitera.klock.domain
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@JvmInline
+@Serializable
+value class CustomerId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+
 @OptIn(ExperimentalUuidApi::class)
 data class Customer(
-    val id: Uuid,
+    val id: CustomerId,
     val vatNumber: String,
     val taxCode: String,
     val companyName: String,
@@ -18,7 +24,7 @@ data class Customer(
 )
 
 sealed interface CustomerRequest {
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Create(
         val vatNumber: String,
         val taxCode: String,
@@ -29,9 +35,9 @@ sealed interface CustomerRequest {
         val address: String
     ) : CustomerRequest
 
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Update(
-        val id: Uuid,
+        val id: CustomerId,
         val vatNumber: String?,
         val taxCode: String?,
         val companyName: String?,
@@ -41,7 +47,7 @@ sealed interface CustomerRequest {
         val address: String?
     ) : CustomerRequest
 
-    @OptIn(ExperimentalUuidApi::class)
+    @Serializable
     data class Filter(
         val companyName: String?,
         val name: String?,

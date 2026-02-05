@@ -1,4 +1,4 @@
-package org.stefanoprivitera.klock.service
+package org.stefanoprivitera.klock.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

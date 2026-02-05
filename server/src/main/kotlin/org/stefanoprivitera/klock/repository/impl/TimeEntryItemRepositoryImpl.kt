@@ -1,6 +1,5 @@
 package org.stefanoprivitera.klock.repository.impl
 
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
@@ -8,41 +7,41 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
-import org.stefanoprivitera.klock.domain.TimeEntryItem
-import org.stefanoprivitera.klock.domain.TimeEntryItemRequest
+import org.stefanoprivitera.klock.domain.*
 import org.stefanoprivitera.klock.persistance.TimeEntryItems
 import org.stefanoprivitera.klock.repository.TimeEntryItemRepository
+import org.stefanoprivitera.klock.repository.mapper.toTimeEntryItem
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class TimeEntryItemRepositoryImpl : TimeEntryItemRepository {
-    override fun create(item: TimeEntryItemRequest.Create): Uuid {
+    override fun create(item: TimeEntryItemRequest.Create): TimeEntryItemId {
         return transaction {
-            TimeEntryItems.insertAndGetId {
-                it[timeEntryId] = item.timeEntryId
-                it[projectId] = item.projectId
+            TimeEntryItemId(TimeEntryItems.insertAndGetId {
+                it[timeEntryId] = item.timeEntryId.value
+                it[projectId] = item.projectId.value
                 it[hours] = item.hours.toBigDecimal()
                 it[approved] = false
-            }.value
+            }.value)
         }
     }
 
     override fun update(item: TimeEntryItemRequest.Update): Int {
         return transaction {
-            TimeEntryItems.update({ TimeEntryItems.id eq item.id }) {
-                item.projectId?.let { p -> it[projectId] = p }
+            TimeEntryItems.update({ TimeEntryItems.id eq item.id.value }) {
+                item.projectId?.let { p -> it[projectId] = p.value }
                 item.hours?.let { h -> it[hours] = h.toBigDecimal() }
                 item.approved?.let { a -> it[approved] = a }
             }
         }
     }
 
-    override fun findById(id: Uuid): TimeEntryItem? {
+    override fun findById(id: TimeEntryItemId): TimeEntryItem? {
         return transaction {
             TimeEntryItems.selectAll()
-                .where { TimeEntryItems.id eq id }
+                .where { TimeEntryItems.id eq id.value }
                 .map(::toTimeEntryItem)
                 .firstOrNull()
         }
@@ -50,35 +49,23 @@ class TimeEntryItemRepositoryImpl : TimeEntryItemRepository {
 
     override fun findAll(filter: TimeEntryItemRequest.Filter): List<TimeEntryItem> {
         return transaction {
-            var query = TimeEntryItems.selectAll()
-
-            filter.timeEntryId?.let { query = query.where { TimeEntryItems.timeEntryId eq it } }
-            filter.projectId?.let { query = query.where { TimeEntryItems.projectId eq it } }
-            filter.approved?.let { query = query.where { TimeEntryItems.approved eq it } }
-
-            query.map(::toTimeEntryItem)
+            TimeEntryItems.selectAll()
+                .andWhereIfNotNull(filter.timeEntryId) { TimeEntryItems.timeEntryId eq it.value }
+                .andWhereIfNotNull(filter.projectId) { TimeEntryItems.projectId eq it.value }
+                .andWhereIfNotNull(filter.approved) { TimeEntryItems.approved eq it }
+                .map(::toTimeEntryItem)
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: TimeEntryItemId): Int {
         return transaction {
-            TimeEntryItems.deleteWhere { TimeEntryItems.id eq id }
+            TimeEntryItems.deleteWhere { TimeEntryItems.id eq id.value }
         }
     }
 
-    override fun deleteByTimeEntryId(timeEntryId: Uuid): Int {
+    override fun deleteByTimeEntryId(timeEntryId: TimeEntryId): Int {
         return transaction {
-            TimeEntryItems.deleteWhere { TimeEntryItems.timeEntryId eq timeEntryId }
+            TimeEntryItems.deleteWhere { TimeEntryItems.timeEntryId eq timeEntryId.value }
         }
-    }
-
-    private fun toTimeEntryItem(r: ResultRow): TimeEntryItem {
-        return TimeEntryItem(
-            id = r[TimeEntryItems.id].value,
-            timeEntryId = r[TimeEntryItems.timeEntryId].value,
-            projectId = r[TimeEntryItems.projectId].value,
-            hours = r[TimeEntryItems.hours].toDouble(),
-            approved = r[TimeEntryItems.approved]
-        )
     }
 }

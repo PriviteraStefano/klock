@@ -1,14 +1,14 @@
 package org.stefanoprivitera.klock.repository
 
+import org.stefanoprivitera.klock.domain.DepartmentId
 import org.stefanoprivitera.klock.domain.UserDepartment
+import org.stefanoprivitera.klock.domain.UserDepartmentId
 import org.stefanoprivitera.klock.domain.UserDepartmentRequest
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import org.stefanoprivitera.klock.domain.UserId
 
-@OptIn(ExperimentalUuidApi::class)
 interface UserDepartmentRepository {
-    fun create(userDepartment: UserDepartmentRequest.Create): Uuid
+    fun create(userDepartment: UserDepartmentRequest.Create): UserDepartmentId
     fun findAll(filter: UserDepartmentRequest.Filter): List<UserDepartment>
-    fun deleteById(id: Uuid): Int
-    fun deleteByUserAndDepartment(userId: Uuid, departmentId: Uuid): Int
+    fun deleteById(id: UserDepartmentId): Int
+    fun deleteByUserAndDepartment(userId: UserId, departmentId: DepartmentId): Int
 }

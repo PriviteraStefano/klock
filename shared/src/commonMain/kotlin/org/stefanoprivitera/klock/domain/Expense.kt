@@ -3,13 +3,18 @@ package org.stefanoprivitera.klock.domain
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@JvmInline
+@Serializable
+value class ExpenseId @OptIn(ExperimentalUuidApi::class) constructor(val value: Uuid)
+
 @OptIn(ExperimentalUuidApi::class)
 data class Expense(
-    val id: Uuid,
-    val userId: Uuid,
+    val id: ExpenseId,
+    val userId: UserId,
     val date: LocalDate,
     val category: String,
     val amount: Double,
@@ -20,10 +25,9 @@ data class Expense(
 )
 
 sealed interface ExpenseRequest {
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Create(
-        val userId: Uuid,
+        val userId: UserId,
         val date: LocalDate,
         val category: String,
         val amount: Double,
@@ -31,10 +35,9 @@ sealed interface ExpenseRequest {
         val status: String = "pending"
     ) : ExpenseRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Update(
-        val id: Uuid,
+        val id: ExpenseId,
         val date: LocalDate?,
         val category: String?,
         val amount: Double?,
@@ -42,10 +45,9 @@ sealed interface ExpenseRequest {
         val status: String?
     ) : ExpenseRequest
 
-    @OptIn(ExperimentalUuidApi::class)
     @Serializable
     data class Filter(
-        val userId: Uuid?,
+        val userId: UserId?,
         val dateFrom: LocalDate?,
         val dateTo: LocalDate?,
         val category: String?,

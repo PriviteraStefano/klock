@@ -7,58 +7,55 @@ import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.koin.core.annotation.Single
-import org.stefanoprivitera.klock.domain.UserDepartment
-import org.stefanoprivitera.klock.domain.UserDepartmentRequest
+import org.stefanoprivitera.klock.domain.*
 import org.stefanoprivitera.klock.persistance.DepartmentUsers
 import org.stefanoprivitera.klock.repository.UserDepartmentRepository
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class UserDepartmentRepositoryImpl : UserDepartmentRepository {
-    override fun create(userDepartment: UserDepartmentRequest.Create): Uuid {
+    override fun create(userDepartment: UserDepartmentRequest.Create): UserDepartmentId {
         return transaction {
-            DepartmentUsers.insertAndGetId {
-                it[userId] = userDepartment.userId
-                it[departmentId] = userDepartment.departmentId
-            }.value
+            UserDepartmentId(DepartmentUsers.insertAndGetId {
+                it[userId] = userDepartment.userId.value
+                it[departmentId] = userDepartment.departmentId.value
+            }.value)
         }
     }
 
     override fun findAll(filter: UserDepartmentRequest.Filter): List<UserDepartment> {
         return transaction {
-            var query = DepartmentUsers.selectAll()
-
-            filter.userId?.let { query = query.where { DepartmentUsers.userId eq it } }
-            filter.departmentId?.let { query = query.where { DepartmentUsers.departmentId eq it } }
-
-            query.map(::toUserDepartment)
+            DepartmentUsers.selectAll()
+                .andWhereIfNotNull(filter.userId) { DepartmentUsers.userId eq it.value }
+                .andWhereIfNotNull(filter.departmentId) { DepartmentUsers.departmentId eq it.value }
+                .map(::toUserDepartment)
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: UserDepartmentId): Int {
         return transaction {
-            DepartmentUsers.deleteWhere { DepartmentUsers.id eq id }
+            DepartmentUsers.deleteWhere { DepartmentUsers.id eq id.value }
         }
     }
 
-    override fun deleteByUserAndDepartment(userId: Uuid, departmentId: Uuid): Int {
+    override fun deleteByUserAndDepartment(userId: UserId, departmentId: DepartmentId): Int {
         return transaction {
             DepartmentUsers.deleteWhere {
-                DepartmentUsers.userId eq userId
+                DepartmentUsers.userId eq userId.value
             }
             DepartmentUsers.deleteWhere {
-                DepartmentUsers.departmentId eq departmentId
+                DepartmentUsers.departmentId eq departmentId.value
             }
         }
     }
 
     private fun toUserDepartment(r: ResultRow): UserDepartment {
         return UserDepartment(
-            id = r[DepartmentUsers.id].value,
-            departmentId = r[DepartmentUsers.departmentId].value,
-            userId = r[DepartmentUsers.userId].value
+            id = UserDepartmentId(r[DepartmentUsers.id].value),
+            departmentId = DepartmentId(r[DepartmentUsers.departmentId].value),
+            userId = UserId(r[DepartmentUsers.userId].value)
         )
     }
 }

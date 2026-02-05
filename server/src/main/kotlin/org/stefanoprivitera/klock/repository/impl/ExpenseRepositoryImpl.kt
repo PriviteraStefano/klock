@@ -2,7 +2,6 @@ package org.stefanoprivitera.klock.repository.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.less
@@ -13,20 +12,22 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Expense
+import org.stefanoprivitera.klock.domain.ExpenseId
 import org.stefanoprivitera.klock.domain.ExpenseRequest
 import org.stefanoprivitera.klock.persistance.Expenses
 import org.stefanoprivitera.klock.repository.ExpenseRepository
+import org.stefanoprivitera.klock.repository.mapper.toExpense
+import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Single
 @OptIn(ExperimentalUuidApi::class)
 class ExpenseRepositoryImpl : ExpenseRepository {
-    override fun create(expense: ExpenseRequest.Create): Uuid {
+    override fun create(expense: ExpenseRequest.Create): ExpenseId {
         return transaction {
-            Expenses.insertAndGetId {
-                it[userId] = expense.userId
+            ExpenseId(Expenses.insertAndGetId {
+                it[userId] = expense.userId.value
                 it[date] = expense.date
                 it[category] = expense.category
                 it[amount] = expense.amount.toBigDecimal()
@@ -34,13 +35,13 @@ class ExpenseRepositoryImpl : ExpenseRepository {
                 it[status] = expense.status
                 it[createdAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 it[updatedAt] = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            }.value
+            }.value)
         }
     }
 
     override fun update(expense: ExpenseRequest.Update): Int {
         return transaction {
-            Expenses.update({ Expenses.id eq expense.id }) {
+            Expenses.update({ Expenses.id eq expense.id.value }) {
                 expense.date?.let { d -> it[date] = d }
                 expense.category?.let { c -> it[category] = c }
                 expense.amount?.let { a -> it[amount] = a.toBigDecimal() }
@@ -51,10 +52,10 @@ class ExpenseRepositoryImpl : ExpenseRepository {
         }
     }
 
-    override fun findById(id: Uuid): Expense? {
+    override fun findById(id: ExpenseId): Expense? {
         return transaction {
             Expenses.selectAll()
-                .where { Expenses.id eq id }
+                .where { Expenses.id eq id.value }
                 .map(::toExpense)
                 .firstOrNull()
         }
@@ -62,45 +63,20 @@ class ExpenseRepositoryImpl : ExpenseRepository {
 
     override fun findAll(filter: ExpenseRequest.Filter): List<Expense> {
         return transaction {
-            var query = Expenses.selectAll()
-
-            filter.userId?.let {
-                query = query.where { Expenses.userId eq it }
-            }
-            filter.dateFrom?.let {
-                query = query.where { Expenses.date greater it }
-            }
-            filter.dateTo?.let {
-                query = query.where { Expenses.date less it }
-            }
-            filter.category?.let {
-                query = query.where { Expenses.category eq it }
-            }
-            filter.status?.let {
-                query = query.where { Expenses.status eq it }
-            }
-
-            query.map(::toExpense)
+            Expenses.selectAll()
+                .andWhereIfNotNull(filter.userId) { Expenses.userId eq it.value }
+                .andWhereIfNotNull(filter.dateFrom) { Expenses.date greater it }
+                .andWhereIfNotNull(filter.dateTo) { Expenses.date less it }
+                .andWhereIfNotNull(filter.category) { Expenses.category eq it }
+                .andWhereIfNotNull(filter.status) { Expenses.status eq it }
+                .map(::toExpense)
         }
     }
 
-    override fun deleteById(id: Uuid): Int {
+    override fun deleteById(id: ExpenseId): Int {
         return transaction {
-            Expenses.deleteWhere { Expenses.id eq id }
+            Expenses.deleteWhere { Expenses.id eq id.value }
         }
     }
 
-    private fun toExpense(r: ResultRow): Expense {
-        return Expense(
-            id = r[Expenses.id].value,
-            userId = r[Expenses.userId].value,
-            date = r[Expenses.date],
-            category = r[Expenses.category],
-            amount = r[Expenses.amount].toDouble(),
-            currency = r[Expenses.currency],
-            status = r[Expenses.status],
-            createdAt = r[Expenses.createdAt],
-            updatedAt = r[Expenses.updatedAt]
-        )
-    }
 }
