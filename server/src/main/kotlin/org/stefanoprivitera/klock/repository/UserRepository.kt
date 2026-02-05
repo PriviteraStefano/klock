@@ -9,6 +9,6 @@ interface UserRepository {
     fun update(user: UserRequest.Update): Int
     fun findById(id: UserId): User?
     fun findByEmail(email: String): User?
-    fun findAll(): List<User>
+    fun findAll(filter: UserRequest.Filter): List<User>
     fun deleteById(id: UserId): Int
 }

@@ -44,7 +44,5 @@ sealed interface UserRequest {
         val email: String?,
         val firstname: String?,
         val lastname: String?,
-        val groupName: String?,
-        val departmentName: String?,
     ) : UserRequest
 }

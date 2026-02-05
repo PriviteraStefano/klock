@@ -4,11 +4,10 @@ import org.stefanoprivitera.klock.domain.User
 import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.UserRequest
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 interface UserService {
-    fun create(user: UserRequest.Create): Uuid
+    fun create(user: UserRequest.Create): UserId
     fun update(user: UserRequest.Update): Int
     fun findById(id: UserId): User?
     fun findByEmail(email: String): User?

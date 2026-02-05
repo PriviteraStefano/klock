@@ -1,6 +1,7 @@
 package org.stefanoprivitera.klock.repository.impl
 
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
@@ -40,13 +41,10 @@ class UserDepartmentRepositoryImpl : UserDepartmentRepository {
         }
     }
 
-    override fun deleteByUserAndDepartment(userId: UserId, departmentId: DepartmentId): Int {
+    override fun deleteDepartmentUser(userId: UserId, departmentId: DepartmentId): Int {
         return transaction {
             DepartmentUsers.deleteWhere {
-                DepartmentUsers.userId eq userId.value
-            }
-            DepartmentUsers.deleteWhere {
-                DepartmentUsers.departmentId eq departmentId.value
+                DepartmentUsers.userId eq userId.value and(DepartmentUsers.departmentId eq departmentId.value)
             }
         }
     }
