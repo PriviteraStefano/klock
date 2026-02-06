@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.Expense
 import org.stefanoprivitera.klock.domain.ExpenseId
-import org.stefanoprivitera.klock.domain.ExpenseRequest
+import org.stefanoprivitera.klock.domain.request.ExpenseRequest
 
 interface ExpenseService {
     fun create(expense: ExpenseRequest.Create): ExpenseId

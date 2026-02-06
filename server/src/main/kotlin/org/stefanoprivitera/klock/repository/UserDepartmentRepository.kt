@@ -3,7 +3,7 @@ package org.stefanoprivitera.klock.repository
 import org.stefanoprivitera.klock.domain.DepartmentId
 import org.stefanoprivitera.klock.domain.UserDepartment
 import org.stefanoprivitera.klock.domain.UserDepartmentId
-import org.stefanoprivitera.klock.domain.UserDepartmentRequest
+import org.stefanoprivitera.klock.domain.request.UserDepartmentRequest
 import org.stefanoprivitera.klock.domain.UserId
 
 interface UserDepartmentRepository {

@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.Project
 import org.stefanoprivitera.klock.domain.ProjectId
-import org.stefanoprivitera.klock.domain.ProjectRequest
+import org.stefanoprivitera.klock.domain.request.ProjectRequest
 
 interface ProjectService {
     fun create(project: ProjectRequest.Create): ProjectId

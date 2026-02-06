@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.Customer
 import org.stefanoprivitera.klock.domain.CustomerId
-import org.stefanoprivitera.klock.domain.CustomerRequest
+import org.stefanoprivitera.klock.domain.request.CustomerRequest
 
 interface CustomerService {
     fun create(customer: CustomerRequest.Create): CustomerId

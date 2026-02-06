@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.Department
 import org.stefanoprivitera.klock.domain.DepartmentId
-import org.stefanoprivitera.klock.domain.DepartmentRequest
+import org.stefanoprivitera.klock.domain.request.DepartmentRequest
 
 interface DepartmentService {
     fun create(department: DepartmentRequest.Create): DepartmentId

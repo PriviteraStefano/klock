@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Request
 import org.stefanoprivitera.klock.domain.RequestId
-import org.stefanoprivitera.klock.domain.RequestRequest
+import org.stefanoprivitera.klock.domain.request.RequestRequest
 import org.stefanoprivitera.klock.persistance.Requests
 import org.stefanoprivitera.klock.repository.RequestRepository
 import org.stefanoprivitera.klock.repository.mapper.toRequest

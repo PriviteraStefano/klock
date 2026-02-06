@@ -12,7 +12,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.User
 import org.stefanoprivitera.klock.domain.UserId
-import org.stefanoprivitera.klock.domain.UserRequest
+import org.stefanoprivitera.klock.domain.request.UserRequest
 import org.stefanoprivitera.klock.persistance.Users
 import org.stefanoprivitera.klock.repository.UserRepository
 import org.stefanoprivitera.klock.repository.mapper.toUser

@@ -10,7 +10,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Department
 import org.stefanoprivitera.klock.domain.DepartmentId
-import org.stefanoprivitera.klock.domain.DepartmentRequest
+import org.stefanoprivitera.klock.domain.request.DepartmentRequest
 import org.stefanoprivitera.klock.persistance.Departments
 import org.stefanoprivitera.klock.persistance.Users
 import org.stefanoprivitera.klock.repository.DepartmentRepository

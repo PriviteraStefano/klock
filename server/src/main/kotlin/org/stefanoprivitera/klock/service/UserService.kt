@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.User
 import org.stefanoprivitera.klock.domain.UserId
-import org.stefanoprivitera.klock.domain.UserRequest
+import org.stefanoprivitera.klock.domain.request.UserRequest
 import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalUuidApi::class)

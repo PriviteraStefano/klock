@@ -13,7 +13,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Expense
 import org.stefanoprivitera.klock.domain.ExpenseId
-import org.stefanoprivitera.klock.domain.ExpenseRequest
+import org.stefanoprivitera.klock.domain.request.ExpenseRequest
 import org.stefanoprivitera.klock.persistance.Expenses
 import org.stefanoprivitera.klock.repository.ExpenseRepository
 import org.stefanoprivitera.klock.repository.mapper.toExpense

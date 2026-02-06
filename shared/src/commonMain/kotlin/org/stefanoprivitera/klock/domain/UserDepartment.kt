@@ -16,16 +16,3 @@ data class UserDepartment(
     val userId: UserId
 )
 
-sealed interface UserDepartmentRequest {
-    @Serializable
-    data class Create(
-        val userId: UserId,
-        val departmentId: DepartmentId
-    ) : UserDepartmentRequest
-
-    @Serializable
-    data class Filter(
-        val userId: UserId?,
-        val departmentId: DepartmentId?
-    ) : UserDepartmentRequest
-}

@@ -3,7 +3,7 @@ package org.stefanoprivitera.klock.service.impl
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.TimeEntry
 import org.stefanoprivitera.klock.domain.TimeEntryId
-import org.stefanoprivitera.klock.domain.TimeEntryRequest
+import org.stefanoprivitera.klock.domain.request.TimeEntryRequest
 import org.stefanoprivitera.klock.repository.TimeEntryRepository
 import org.stefanoprivitera.klock.service.TimeEntryService
 

@@ -6,7 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.WorkGroupId
-import org.stefanoprivitera.klock.domain.WorkGroupRequest
+import org.stefanoprivitera.klock.domain.request.WorkGroupRequest
 import org.stefanoprivitera.klock.domain.response.WorkGroupResponse
 import org.stefanoprivitera.klock.service.WorkGroupService
 import kotlin.uuid.ExperimentalUuidApi

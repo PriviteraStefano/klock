@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.repository
 
 import org.stefanoprivitera.klock.domain.User
 import org.stefanoprivitera.klock.domain.UserId
-import org.stefanoprivitera.klock.domain.UserRequest
+import org.stefanoprivitera.klock.domain.request.UserRequest
 
 interface UserRepository {
     fun create(user: UserRequest.Create): UserId

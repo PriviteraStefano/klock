@@ -7,7 +7,7 @@ import io.ktor.server.routing.*
 import kotlinx.datetime.LocalDate
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.ExpenseId
-import org.stefanoprivitera.klock.domain.ExpenseRequest
+import org.stefanoprivitera.klock.domain.request.ExpenseRequest
 import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.response.ExpenseResponse
 import org.stefanoprivitera.klock.service.ExpenseService

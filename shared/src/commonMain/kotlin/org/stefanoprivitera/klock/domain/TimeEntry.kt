@@ -25,38 +25,6 @@ data class TimeEntry(
     val updatedAt: LocalDateTime
 )
 
-sealed interface TimeEntryRequest {
-    @Serializable
-    data class Create(
-        val userId: UserId,
-        val date: LocalDate,
-        val type: String,
-        val totalHours: Double,
-        val status: String,
-        val metadata: TimeEntryMetadata
-    ) : TimeEntryRequest
-
-    @Serializable
-    data class Update(
-        val id: TimeEntryId,
-        val date: LocalDate?,
-        val type: String?,
-        val totalHours: Double?,
-        val status: String?,
-        val metadata: TimeEntryMetadata?
-    ) : TimeEntryRequest
-
-    @Serializable
-    data class Filter(
-        val userId: UserId?,
-        val dateFrom: LocalDate?,
-        val dateTo: LocalDate?,
-        val type: String?,
-        val status: String?
-    ) : TimeEntryRequest
-}
-
-
 @OptIn(ExperimentalUuidApi::class)
 sealed interface TimeEntryMetadata {
     @Serializable
@@ -87,3 +55,4 @@ sealed interface TimeEntryMetadata {
     @SerialName("Permit")
     data class Permit(val type: String) : TimeEntryMetadata
 }
+

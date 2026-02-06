@@ -13,7 +13,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Contract
 import org.stefanoprivitera.klock.domain.ContractId
-import org.stefanoprivitera.klock.domain.ContractRequest
+import org.stefanoprivitera.klock.domain.request.ContractRequest
 import org.stefanoprivitera.klock.persistance.Contracts
 import org.stefanoprivitera.klock.repository.ContractRepository
 import org.stefanoprivitera.klock.repository.mapper.toContract

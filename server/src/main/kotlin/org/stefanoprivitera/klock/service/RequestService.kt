@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.service
 
 import org.stefanoprivitera.klock.domain.Request
 import org.stefanoprivitera.klock.domain.RequestId
-import org.stefanoprivitera.klock.domain.RequestRequest
+import org.stefanoprivitera.klock.domain.request.RequestRequest
 
 interface RequestService {
     fun findAll(filter: RequestRequest.Filter): List<Request>

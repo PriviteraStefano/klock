@@ -21,31 +21,3 @@ data class Request(
     val updatedAt: String
 )
 
-sealed interface RequestRequest {
-    @Serializable
-    data class Create(
-        val projectId: ProjectId,
-        val contractId: ContractId,
-        val requestType: String,
-        val details: String,
-        val status: String
-    ) : RequestRequest
-
-    @Serializable
-    data class Update(
-        val id: RequestId,
-        val projectId: ProjectId?,
-        val contractId: ContractId?,
-        val requestType: String?,
-        val details: String?,
-        val status: String?
-    ) : RequestRequest
-
-    @Serializable
-    data class Filter(
-        val projectId: ProjectId?,
-        val contractId: ContractId?,
-        val requestType: String?,
-        val status: String?
-    ) : RequestRequest
-}

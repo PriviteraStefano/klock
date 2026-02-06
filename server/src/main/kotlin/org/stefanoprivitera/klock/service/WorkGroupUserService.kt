@@ -4,7 +4,7 @@ import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.WorkGroupId
 import org.stefanoprivitera.klock.domain.WorkGroupUser
 import org.stefanoprivitera.klock.domain.WorkGroupUserId
-import org.stefanoprivitera.klock.domain.WorkGroupUserRequest
+import org.stefanoprivitera.klock.domain.request.WorkGroupUserRequest
 
 interface WorkGroupUserService {
     fun create(workGroupUser: WorkGroupUserRequest.Create): WorkGroupUserId

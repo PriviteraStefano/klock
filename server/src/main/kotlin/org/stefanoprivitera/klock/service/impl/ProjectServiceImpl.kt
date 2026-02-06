@@ -3,7 +3,7 @@ package org.stefanoprivitera.klock.service.impl
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.Project
 import org.stefanoprivitera.klock.domain.ProjectId
-import org.stefanoprivitera.klock.domain.ProjectRequest
+import org.stefanoprivitera.klock.domain.request.ProjectRequest
 import org.stefanoprivitera.klock.repository.ProjectRepository
 import org.stefanoprivitera.klock.service.ProjectService
 

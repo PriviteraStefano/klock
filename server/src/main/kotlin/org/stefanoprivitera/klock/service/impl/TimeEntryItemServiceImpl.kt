@@ -4,7 +4,7 @@ import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.TimeEntryId
 import org.stefanoprivitera.klock.domain.TimeEntryItem
 import org.stefanoprivitera.klock.domain.TimeEntryItemId
-import org.stefanoprivitera.klock.domain.TimeEntryItemRequest
+import org.stefanoprivitera.klock.domain.request.TimeEntryItemRequest
 import org.stefanoprivitera.klock.repository.TimeEntryItemRepository
 import org.stefanoprivitera.klock.service.TimeEntryItemService
 

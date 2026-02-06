@@ -6,7 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.DepartmentId
-import org.stefanoprivitera.klock.domain.DepartmentRequest
+import org.stefanoprivitera.klock.domain.request.DepartmentRequest
 import org.stefanoprivitera.klock.domain.response.DepartmentResponse
 import org.stefanoprivitera.klock.service.DepartmentService
 import kotlin.uuid.ExperimentalUuidApi

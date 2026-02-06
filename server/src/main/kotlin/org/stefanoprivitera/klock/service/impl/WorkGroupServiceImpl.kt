@@ -3,7 +3,7 @@ package org.stefanoprivitera.klock.service.impl
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.WorkGroup
 import org.stefanoprivitera.klock.domain.WorkGroupId
-import org.stefanoprivitera.klock.domain.WorkGroupRequest
+import org.stefanoprivitera.klock.domain.request.WorkGroupRequest
 import org.stefanoprivitera.klock.repository.WorkGroupRepository
 import org.stefanoprivitera.klock.service.WorkGroupService
 

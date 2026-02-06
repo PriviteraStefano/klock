@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.repository
 
 import org.stefanoprivitera.klock.domain.Contract
 import org.stefanoprivitera.klock.domain.ContractId
-import org.stefanoprivitera.klock.domain.ContractRequest
+import org.stefanoprivitera.klock.domain.request.ContractRequest
 
 interface ContractRepository {
     fun create(contract: ContractRequest.Create): ContractId

@@ -16,16 +16,3 @@ data class WorkGroupUser(
     val userId: UserId
 )
 
-sealed interface WorkGroupUserRequest {
-    @Serializable
-    data class Create(
-        val workGroupId: WorkGroupId,
-        val userId: UserId
-    ) : WorkGroupUserRequest
-
-    @Serializable
-    data class Filter(
-        val workGroupId: WorkGroupId?,
-        val userId: UserId?
-    ) : WorkGroupUserRequest
-}

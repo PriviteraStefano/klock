@@ -18,26 +18,3 @@ data class TimeEntryItem(
     val approved: Boolean
 )
 
-sealed interface TimeEntryItemRequest {
-    @Serializable
-    data class Create(
-        val timeEntryId: TimeEntryId,
-        val projectId: ProjectId,
-        val hours: Double
-    ) : TimeEntryItemRequest
-
-    @Serializable
-    data class Update(
-        val id: TimeEntryItemId,
-        val projectId: ProjectId?,
-        val hours: Double?,
-        val approved: Boolean?
-    ) : TimeEntryItemRequest
-
-    @Serializable
-    data class Filter(
-        val timeEntryId: TimeEntryId?,
-        val projectId: ProjectId?,
-        val approved: Boolean?
-    ) : TimeEntryItemRequest
-}

@@ -2,7 +2,7 @@ package org.stefanoprivitera.klock.repository
 
 import org.stefanoprivitera.klock.domain.WorkGroup
 import org.stefanoprivitera.klock.domain.WorkGroupId
-import org.stefanoprivitera.klock.domain.WorkGroupRequest
+import org.stefanoprivitera.klock.domain.request.WorkGroupRequest
 
 interface WorkGroupRepository {
     fun create(workGroup: WorkGroupRequest.Create): WorkGroupId
