@@ -4,12 +4,11 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.LocalDate
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.ExpenseId
 import org.stefanoprivitera.klock.domain.request.ExpenseRequest
-import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.response.ExpenseResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toExpenseFilter
 import org.stefanoprivitera.klock.service.ExpenseService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -20,12 +19,7 @@ fun Route.expenses() {
 
     route("/expenses") {
         get {
-            val userId = call.request.queryParameters["userId"]?.let { UserId(Uuid.parse(it)) }
-            val dateFrom = call.request.queryParameters["dateFrom"]?.let { LocalDate.parse(it) }
-            val dateTo = call.request.queryParameters["dateTo"]?.let { LocalDate.parse(it) }
-            val category = call.request.queryParameters["category"]
-            val status = call.request.queryParameters["status"]
-            val filterRequest = ExpenseRequest.Filter(userId, dateFrom, dateTo, category, status)
+            val filterRequest = call.queryParameters.toExpenseFilter()
             val expenses = expenseService.findAll(filterRequest).map { ExpenseResponse.from(it) }
             call.respond(expenses)
         }

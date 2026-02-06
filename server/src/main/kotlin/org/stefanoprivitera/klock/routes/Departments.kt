@@ -8,6 +8,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.DepartmentId
 import org.stefanoprivitera.klock.domain.request.DepartmentRequest
 import org.stefanoprivitera.klock.domain.response.DepartmentResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toDepartmentFilter
 import org.stefanoprivitera.klock.service.DepartmentService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -18,10 +19,7 @@ fun Route.departments() {
 
     route("/departments") {
         get {
-            val name = call.request.queryParameters["name"]
-            val description = call.request.queryParameters["description"]
-            val parentDepartmentId = call.request.queryParameters["parentDepartmentId"]?.let { DepartmentId(Uuid.parse(it)) }
-            val filterRequest = DepartmentRequest.Filter(name, description, parentDepartmentId)
+            val filterRequest = call.queryParameters.toDepartmentFilter()
             val departments = departmentService.findAll(filterRequest).map { DepartmentResponse.from(it) }
             call.respond(departments)
         }

@@ -8,6 +8,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.CustomerId
 import org.stefanoprivitera.klock.domain.request.CustomerRequest
 import org.stefanoprivitera.klock.domain.response.CustomerResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toCustomerFilter
 import org.stefanoprivitera.klock.service.CustomerService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -18,10 +19,7 @@ fun Route.customers() {
 
     route("/customers") {
         get {
-            val companyName = call.request.queryParameters["companyName"]
-            val name = call.request.queryParameters["name"]
-            val email = call.request.queryParameters["email"]
-            val filterRequest = CustomerRequest.Filter(companyName, name, email)
+            val filterRequest = call.queryParameters.toCustomerFilter()
             val customers = customerService.findAll(filterRequest).map { CustomerResponse.from(it) }
             call.respond(customers)
         }

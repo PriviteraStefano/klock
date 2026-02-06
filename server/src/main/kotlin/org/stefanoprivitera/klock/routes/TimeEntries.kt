@@ -4,12 +4,11 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.LocalDate
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.TimeEntryId
 import org.stefanoprivitera.klock.domain.request.TimeEntryRequest
-import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.response.TimeEntryResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toTimeEntryFilter
 import org.stefanoprivitera.klock.service.TimeEntryService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -20,12 +19,7 @@ fun Route.timeEntries() {
 
     route("/time-entries") {
         get {
-            val userId = call.request.queryParameters["userId"]?.let { UserId(Uuid.parse(it)) }
-            val dateFrom = call.request.queryParameters["dateFrom"]?.let { LocalDate.parse(it) }
-            val dateTo = call.request.queryParameters["dateTo"]?.let { LocalDate.parse(it) }
-            val type = call.request.queryParameters["type"]
-            val status = call.request.queryParameters["status"]
-            val filterRequest = TimeEntryRequest.Filter(userId, dateFrom, dateTo, type, status)
+            val filterRequest = call.queryParameters.toTimeEntryFilter()
             val timeEntries = timeEntryService.findAll(filterRequest).map { TimeEntryResponse.from(it) }
             call.respond(timeEntries)
         }

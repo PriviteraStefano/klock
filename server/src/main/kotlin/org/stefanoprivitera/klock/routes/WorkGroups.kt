@@ -8,6 +8,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.WorkGroupId
 import org.stefanoprivitera.klock.domain.request.WorkGroupRequest
 import org.stefanoprivitera.klock.domain.response.WorkGroupResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toWorkGroupFilter
 import org.stefanoprivitera.klock.service.WorkGroupService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -18,10 +19,7 @@ fun Route.workGroups() {
 
     route("/work-groups") {
         get {
-            val name = call.request.queryParameters["name"]
-            val description = call.request.queryParameters["description"]
-            val users = call.request.queryParameters["users"]?.split(",")
-            val filterRequest = WorkGroupRequest.Filter(name, description, users)
+            val filterRequest = call.queryParameters.toWorkGroupFilter()
             val workGroups = workGroupService.findAll(filterRequest).map { WorkGroupResponse.from(it) }
             call.respond(workGroups)
         }

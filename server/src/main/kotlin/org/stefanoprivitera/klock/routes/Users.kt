@@ -8,6 +8,7 @@ import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.UserId
 import org.stefanoprivitera.klock.domain.request.UserRequest
 import org.stefanoprivitera.klock.domain.response.UserResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toUserFilter
 import org.stefanoprivitera.klock.service.UserService
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -17,10 +18,7 @@ fun Route.users() {
 
     route("/users") {
         get {
-            val email = call.request.queryParameters["email"]
-            val firstname = call.request.queryParameters["firstname"]
-            val lastname = call.request.queryParameters["lastname"]
-            val filterRequest = UserRequest.Filter(email, firstname, lastname)
+            val filterRequest = call.request.queryParameters.toUserFilter()
             val users = userService.findAll(filterRequest).map { UserResponse.from(it) }
             call.respond(users)
         }

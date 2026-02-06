@@ -4,12 +4,11 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.LocalDate
 import org.koin.ktor.ext.inject
 import org.stefanoprivitera.klock.domain.ContractId
 import org.stefanoprivitera.klock.domain.request.ContractRequest
-import org.stefanoprivitera.klock.domain.CustomerId
 import org.stefanoprivitera.klock.domain.response.ContractResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toContractFilter
 import org.stefanoprivitera.klock.service.ContractService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -20,11 +19,7 @@ fun Route.contracts() {
 
     route("/contracts") {
         get {
-            val customerId = call.request.queryParameters["customerId"]?.let { CustomerId(Uuid.parse(it)) }
-            val billingDateFrom = call.request.queryParameters["billingDateFrom"]?.let { LocalDate.parse(it) }
-            val billingDateTo = call.request.queryParameters["billingDateTo"]?.let { LocalDate.parse(it) }
-            val status = call.request.queryParameters["status"]
-            val filterRequest = ContractRequest.Filter(customerId, billingDateFrom, billingDateTo, status)
+            val filterRequest = call.request.queryParameters.toContractFilter()
             val contracts = contractService.findAll(filterRequest).map { ContractResponse.from(it) }
             call.respond(contracts)
         }

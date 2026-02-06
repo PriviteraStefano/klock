@@ -5,8 +5,12 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
-import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.UserId
+import org.stefanoprivitera.klock.domain.WorkGroupId
+import org.stefanoprivitera.klock.domain.WorkGroupUserId
+import org.stefanoprivitera.klock.domain.request.WorkGroupUserRequest
 import org.stefanoprivitera.klock.domain.response.WorkGroupUserResponse
+import org.stefanoprivitera.klock.routes.util.FilterBuilder.toWorkGroupUserFilter
 import org.stefanoprivitera.klock.service.WorkGroupUserService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -17,9 +21,7 @@ fun Route.workGroupUsers() {
 
     route("/work-group-users") {
         get {
-            val workGroupId = call.request.queryParameters["workGroupId"]?.let { WorkGroupId(Uuid.parse(it)) }
-            val userId = call.request.queryParameters["userId"]?.let { UserId(Uuid.parse(it)) }
-            val filterRequest = WorkGroupUserRequest.Filter(workGroupId, userId)
+            val filterRequest = call.queryParameters.toWorkGroupUserFilter()
             val workGroupUsers = workGroupUserService.findAll(filterRequest).map { WorkGroupUserResponse.from(it) }
             call.respond(workGroupUsers)
         }
@@ -37,8 +39,9 @@ fun Route.workGroupUsers() {
             val workGroupId = call.request.queryParameters["workGroupId"]?.let { WorkGroupId(Uuid.parse(it)) }
 
             if (userId != null && workGroupId != null) {
-                val deleteResponse = runCatching { workGroupUserService.deleteWorkGroupUser(userId, workGroupId) }.getOrNull()
-                    ?: return@delete call.respond(HttpStatusCode.InternalServerError)
+                val deleteResponse =
+                    runCatching { workGroupUserService.deleteWorkGroupUser(userId, workGroupId) }.getOrNull()
+                        ?: return@delete call.respond(HttpStatusCode.InternalServerError)
                 if (deleteResponse == 0) {
                     return@delete call.respond(HttpStatusCode.NotFound)
                 }
