@@ -8,10 +8,20 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "org.stefanoprivitera.klock.shared"
+        namespace = "org.stefanoprivitera.klock.clientshared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
     }
-
+    
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "Shared"
+            isStatic = true
+        }
+    }
+    
     jvm()
     
     js {
@@ -27,7 +37,6 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.serialization.kotlinx.json)
             implementation(libs.kotlinx.datetime)
-            implementation(projects.clientShared)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

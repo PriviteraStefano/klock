@@ -6,7 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3E9792EC2F378DF30018E646 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9792EB2F378DF30018E646 /* Shared.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		3E9792E72F378DCA0018E646 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = ../shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework/Modules/module.modulemap; sourceTree = "<group>"; };
+		3E9792E92F378DE00018E646 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = Shared; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework/Shared; sourceTree = "<group>"; };
+		3E9792EB2F378DF30018E646 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework; sourceTree = "<group>"; };
 		FE81DEE8C72D8DE624486FC6 /* klock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = klock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -21,17 +28,17 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		A073CBC78F916A14077BE466 /* Configuration */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Configuration;
+			sourceTree = "<group>";
+		};
 		E2B8F2820D82C3B61DD10157 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				21FD68718EFE25953A970264 /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
-			sourceTree = "<group>";
-		};
-		A073CBC78F916A14077BE466 /* Configuration */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Configuration;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -41,27 +48,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E9792EC2F378DF30018E646 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		49397D38BB37DF3EFAFDA523 = {
-			isa = PBXGroup;
-			children = (
-				A073CBC78F916A14077BE466 /* Configuration */,
-				E2B8F2820D82C3B61DD10157 /* iosApp */,
-				1C2EB60597194FBA299F53A3 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
 		1C2EB60597194FBA299F53A3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				FE81DEE8C72D8DE624486FC6 /* klock.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3E9792E62F378DC90018E646 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3E9792EB2F378DF30018E646 /* Shared.framework */,
+				3E9792E92F378DE00018E646 /* Shared */,
+				3E9792E72F378DCA0018E646 /* module.modulemap */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		49397D38BB37DF3EFAFDA523 = {
+			isa = PBXGroup;
+			children = (
+				A073CBC78F916A14077BE466 /* Configuration */,
+				E2B8F2820D82C3B61DD10157 /* iosApp */,
+				3E9792E62F378DC90018E646 /* Frameworks */,
+				1C2EB60597194FBA299F53A3 /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +251,34 @@
 			};
 			name = Debug;
 		};
+		6157F2E56663D818B880FA22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
+				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		9F1629310D313E5D8BA0F7B5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = A073CBC78F916A14077BE466 /* Configuration */;
@@ -317,34 +364,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
-		};
-		6157F2E56663D818B880FA22 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iosApp/Info.plist;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
