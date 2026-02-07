@@ -13,14 +13,11 @@ composeHotReload = "1.0.0"
 composeMultiplatform = "1.10.0"
 exposedCore = "1.0.0"
 exposedJdbc = "1.0.0"
-h2 = "2.4.240"
 junit = "4.13.2"
-khealth = "3.0.2"
 koogKtor = "0.6.1"
 koinKtor = "4.1.2-Beta1"
 koinLoggerSlf4j = "4.1.2-Beta1"
 kotlin = "2.3.0"
-kotlinAsyncapiKtor = "3.2.0"
 kotlinx-coroutines = "1.10.2"
 ktor = "3.4.0"
 logback = "1.5.27"
@@ -62,8 +59,10 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
-# server dependencies
+# --- server dependencies ---
+# ktor dependencies
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
 ktor-client-apache = { module = "io.ktor:ktor-client-apache", version.ref = "ktor" }
@@ -71,20 +70,21 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
-logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-serverNetty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
 ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+# exposed dependencies
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposedJdbc" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposedCore" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposedCore" }
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposedCore" }
-h2 = { module = "com.h2database:h2", version.ref = "h2" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+# koin dependencies
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koinLoggerSlf4j" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }
+# koog dependencies
 koog-ktor = { module = "ai.koog:koog-ktor", version.ref = "koogKtor" }
 
 
