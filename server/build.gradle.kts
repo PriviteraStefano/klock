@@ -20,7 +20,7 @@ dependencies {
     implementation(projects.shared)
     implementation(libs.logback)
     implementation(libs.ktor.server.core.jvm)
-    implementation(libs.ktor.serverNetty)
+    implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.client.core)
@@ -34,11 +34,11 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.koin.annotations)
+    implementation("io.ktor:ktor-server-sse:3.4.0")
     ksp(libs.koin.ksp.compiler)
 
     // Database
     implementation(libs.postgresql)
-    implementation(libs.h2)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.kotlin.datetime)
@@ -50,7 +50,8 @@ dependencies {
     implementation("io.ktor:ktor-server-swagger:3.4.0")
     implementation("io.ktor:ktor-server-routing-openapi:3.4.0")
 
-
+    // MCP
+    implementation("io.modelcontextprotocol:kotlin-sdk-server:0.8.3")
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.kotlin.testJunit)
 }

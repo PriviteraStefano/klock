@@ -8,6 +8,7 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.request.TimeEntryItemRequest
 import org.stefanoprivitera.klock.persistance.TimeEntryItems
 import org.stefanoprivitera.klock.repository.TimeEntryItemRepository
 import org.stefanoprivitera.klock.repository.mapper.toTimeEntryItem

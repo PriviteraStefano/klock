@@ -10,7 +10,9 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.koin.core.annotation.Single
-import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.Project
+import org.stefanoprivitera.klock.domain.ProjectId
+import org.stefanoprivitera.klock.domain.request.ProjectRequest
 import org.stefanoprivitera.klock.persistance.Projects
 import org.stefanoprivitera.klock.repository.ProjectRepository
 import org.stefanoprivitera.klock.repository.mapper.toProject

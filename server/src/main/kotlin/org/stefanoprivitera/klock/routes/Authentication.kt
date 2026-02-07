@@ -2,11 +2,10 @@ package org.stefanoprivitera.klock.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.post
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.stefanoprivitera.klock.configuration.JWTConfig
-import java.util.Date
+import java.util.*
 
 fun Routing.authentication() {
     val config by lazy { JWTConfig(this.environment.config) }

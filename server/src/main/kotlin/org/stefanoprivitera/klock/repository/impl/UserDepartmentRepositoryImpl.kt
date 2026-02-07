@@ -9,6 +9,7 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.koin.core.annotation.Single
 import org.stefanoprivitera.klock.domain.*
+import org.stefanoprivitera.klock.domain.request.UserDepartmentRequest
 import org.stefanoprivitera.klock.persistance.DepartmentUsers
 import org.stefanoprivitera.klock.repository.UserDepartmentRepository
 import org.stefanoprivitera.klock.repository.utils.andWhereIfNotNull
