@@ -29,12 +29,14 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
-    implementation("io.ktor:ktor-server-request-validation:3.4.0")
+    implementation(libs.ktor.server.request.validation)
+    implementation(libs.ktor.server.sse)
+    implementation(libs.ktor.server.cors)
     // Dependency Injection
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.koin.annotations)
-    implementation("io.ktor:ktor-server-sse:3.4.0")
+
     ksp(libs.koin.ksp.compiler)
 
     // Database
@@ -47,11 +49,13 @@ dependencies {
     implementation(libs.koog.ktor)
 
     // OpenAPI and Swagger
-    implementation("io.ktor:ktor-server-swagger:3.4.0")
-    implementation("io.ktor:ktor-server-routing-openapi:3.4.0")
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.routing.openapi)
 
     // MCP
     implementation("io.modelcontextprotocol:kotlin-sdk-server:0.8.3")
+
+    // Testing
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.kotlin.testJunit)
 }
