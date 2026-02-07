@@ -37,6 +37,8 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.serialization.kotlinx.json)
             implementation(libs.kotlinx.datetime)
+            implementation(projects.shared)
+            implementation(projects.features.authentication)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

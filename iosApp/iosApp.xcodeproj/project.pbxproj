@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E9792EC2F378DF30018E646 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9792EB2F378DF30018E646 /* Shared.framework */; };
+		3EF8F5252F37AA5400F7A9D3 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EF8F5242F37AA5400F7A9D3 /* Shared.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3E9792E72F378DCA0018E646 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = ../shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework/Modules/module.modulemap; sourceTree = "<group>"; };
 		3E9792E92F378DE00018E646 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = Shared; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework/Shared; sourceTree = "<group>"; };
 		3E9792EB2F378DF30018E646 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework; sourceTree = "<group>"; };
+		3EF8F5242F37AA5400F7A9D3 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = ../clientShared/build/bin/iosArm64/debugFramework/Shared.framework; sourceTree = "<group>"; };
 		FE81DEE8C72D8DE624486FC6 /* klock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = klock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -48,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E9792EC2F378DF30018E646 /* Shared.framework in Frameworks */,
+				3EF8F5252F37AA5400F7A9D3 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				3E9792EB2F378DF30018E646 /* Shared.framework */,
+				3EF8F5242F37AA5400F7A9D3 /* Shared.framework */,
 				3E9792E92F378DE00018E646 /* Shared */,
 				3E9792E72F378DCA0018E646 /* module.modulemap */,
 			);
@@ -171,7 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :clientShared:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -260,7 +262,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = SL65Y82T6Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -346,7 +348,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = SL65Y82T6Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;

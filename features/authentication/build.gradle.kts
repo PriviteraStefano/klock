@@ -8,21 +8,20 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "org.stefanoprivitera.klock.shared"
+        namespace = "org.stefanoprivitera.klock.features.authentication"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
     }
 
     listOf(
         iosArm64(),
-        iosSimulatorArm64(),
-        macosArm64(),
+        iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Shared"
+            baseName = "authentication"
             isStatic = true
         }
     }
-
+    
     jvm()
     
     js {

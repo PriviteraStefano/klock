@@ -72,5 +72,5 @@ struct CounterView: View {
 }
 
 #Preview {
-    ContentView()
+    CounterView()
 }

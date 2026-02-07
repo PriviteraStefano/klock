@@ -8,7 +8,6 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sse.*
 import org.koin.core.annotation.KoinApplication
 import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopped
@@ -25,9 +24,6 @@ object KlockApp
 fun Application.module() {
     jsonExtension()
     koinExtension()
-    install(SSE)
-
-
     jwtAuth()
     routing {
         get("/") {
