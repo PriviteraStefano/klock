@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -10,24 +9,17 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "org.stefanoprivitera.klock.clientshared"
+        namespace = "org.stefanoprivitera.klock.features.authentication"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
     }
-    
-    val xcf = XCFramework("ClientShared")
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ClientShared"
+            baseName = "AuthFeature"
             isStatic = true
-            binaryOption("bundleId", "org.stefanoprivitera.klock.clientshared")
-            // Export all public types from dependencies
-            export(projects.shared)
-            export(projects.features.auth)
-            xcf.add(this)
         }
     }
     
@@ -44,15 +36,20 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.serialization.kotlinx.json)
+            implementation(libs.kotlinx.coroutines)
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.kotlinx.datetime)
-            api(projects.shared)
-            api(projects.features.auth)
+
+            implementation(libs.bundles.ktor.common)
+            api(libs.serialization.kotlinx.json)
 
             implementation(libs.koin.core)
             implementation(libs.koin.annotations)
             implementation(libs.koin.test)
             implementation(libs.koin.compose.multiplatform)
+
+
+            implementation(projects.shared)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
