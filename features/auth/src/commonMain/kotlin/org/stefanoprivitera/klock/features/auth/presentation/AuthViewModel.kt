@@ -2,6 +2,7 @@ package org.stefanoprivitera.klock.features.auth.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -9,7 +10,7 @@ import org.stefanoprivitera.klock.features.auth.usecase.AuthUseCase
 
 class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(), KoinComponent {
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
-    val state = _state
+    val state: StateFlow<AuthState> = _state
         .asStateFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _state.value)
 

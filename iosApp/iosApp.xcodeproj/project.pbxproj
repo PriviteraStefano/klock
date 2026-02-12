@@ -7,14 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3EF8F5252F37AA5400F7A9D3 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EF8F5242F37AA5400F7A9D3 /* Shared.framework */; };
+		3EF8F5632F3BD0A800F7A9D3 /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EF8F5622F3BD0A800F7A9D3 /* common.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3E9792E72F378DCA0018E646 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = ../shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework/Modules/module.modulemap; sourceTree = "<group>"; };
-		3E9792E92F378DE00018E646 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = Shared; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework/Shared; sourceTree = "<group>"; };
-		3E9792EB2F378DF30018E646 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = ../shared/build/bin/iosArm64/debugFramework/Shared.framework; sourceTree = "<group>"; };
-		3EF8F5242F37AA5400F7A9D3 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = ../clientShared/build/bin/iosArm64/debugFramework/Shared.framework; sourceTree = "<group>"; };
+		3EF8F5622F3BD0A800F7A9D3 /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = ../common/build/bin/iosSimulatorArm64/debugFramework/common.framework; sourceTree = "<group>"; };
 		FE81DEE8C72D8DE624486FC6 /* klock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = klock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -49,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EF8F5252F37AA5400F7A9D3 /* Shared.framework in Frameworks */,
+				3EF8F5632F3BD0A800F7A9D3 /* common.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,10 +64,7 @@
 		3E9792E62F378DC90018E646 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3E9792EB2F378DF30018E646 /* Shared.framework */,
-				3EF8F5242F37AA5400F7A9D3 /* Shared.framework */,
-				3E9792E92F378DE00018E646 /* Shared */,
-				3E9792E72F378DCA0018E646 /* module.modulemap */,
+				3EF8F5622F3BD0A800F7A9D3 /* common.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -135,6 +129,9 @@
 			);
 			mainGroup = 49397D38BB37DF3EFAFDA523;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3EF8F5702F3BE42200F7A9D3 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1C2EB60597194FBA299F53A3 /* Products */;
 			projectDirPath = "";
@@ -173,7 +170,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :clientShared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :common:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -389,6 +386,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3EF8F5702F3BE42200F7A9D3 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 69C663E9DCC3E3CADC5B4220 /* Project object */;
 }

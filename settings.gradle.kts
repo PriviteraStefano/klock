@@ -35,5 +35,6 @@ plugins {
 include(":composeApp")
 include(":server")
 include(":shared")
-include(":clientShared")
+include(":common")
+include(":clientshared")
 include(":features:auth")

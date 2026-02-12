@@ -1,11 +1,19 @@
 import SwiftUI
-import ClientShared
+import common
 
 @main
-struct CounterApp: App {
+struct iOSApp: App {
+    private let authViewModel: AuthViewModel
+    
+    init() {
+        KoinKt.doInitKoin()
+        // Get the AuthViewModel from Koin
+        let authVMKoin = AuthViewModelKt.AuthViewModel()
+        _authViewModel = StateObject(wrappedValue: AuthViewModelWrapper(authViewModel: authVMKoin))    }
+    
     var body: some Scene {
         WindowGroup {
-            CounterView()
+            AuthFlowView(authViewModel: authViewModel)
         }
     }
 }
@@ -13,18 +21,18 @@ struct CounterApp: App {
 struct CounterView: View {
     @State private var viewModel = CounterViewModel()
     @State private var count: Int32 = 0
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Counter App")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+
             Text("\(count)")
                 .font(.system(size: 60))
                 .fontWeight(.bold)
                 .foregroundColor(.blue)
-            
+
             HStack(spacing: 15) {
                 Button(action: {
                     viewModel.decrement()
@@ -37,7 +45,7 @@ struct CounterView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                
+
                 Button(action: {
                     viewModel.reset()
                     count = viewModel.getCount()
@@ -48,7 +56,7 @@ struct CounterView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                
+
                 Button(action: {
                     viewModel.increment()
                     count = viewModel.getCount()
@@ -61,7 +69,7 @@ struct CounterView: View {
                         .cornerRadius(10)
                 }
             }
-            
+
             Spacer()
         }
         .padding()

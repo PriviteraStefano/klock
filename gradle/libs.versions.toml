@@ -19,6 +19,7 @@ koinKtor = "4.1.2-Beta1"
 koinLoggerSlf4j = "4.1.2-Beta1"
 kotlin = "2.3.10"
 coroutines = "1.10.2"
+kotlinSdkServer = "0.8.3"
 ktor = "3.4.0"
 logback = "1.5.28"
 material3 = "1.10.0-alpha05"
@@ -27,8 +28,9 @@ serialization = "1.10.0"
 koin = "4.2.0-RC1"
 koin-plugin = "0.3.0"
 koin-annotations = "2.3.1"
-ksp = "2.3.2"
+ksp = "2.3.5"
 kotlin-datetime = "0.7.1"
+skie = "0.10.10"
 
 [libraries]
 # common dependencies
@@ -55,6 +57,8 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-client-js = { group = "io.ktor", name = "ktor-client-js", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
 
@@ -97,8 +101,9 @@ ktor-server-sse = { module = "io.ktor:ktor-server-sse", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
 ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "ktor" }
 ktor-server-routing-openapi = { module = "io.ktor:ktor-server-routing-openapi", version.ref = "ktor" }
-
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+# MCP
+kotlin-sdk-server = { module = "io.modelcontextprotocol:kotlin-sdk-server", version.ref = "kotlinSdkServer" }
 # exposed dependencies
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposedJdbc" }
@@ -135,3 +140,5 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+skie = {id = "co.touchlab.skie", version.ref = "skie"}
+nativecoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version = "1.0.1" }
